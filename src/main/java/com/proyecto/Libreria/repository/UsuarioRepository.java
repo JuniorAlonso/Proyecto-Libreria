@@ -1,7 +1,7 @@
-package main.java.com.proyecto.Libreria;
+package com.proyecto.Libreria.repository;
 
+import com.proyecto.Libreria.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.tuempresa.biblioteca.usuario.model.Usuario;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
