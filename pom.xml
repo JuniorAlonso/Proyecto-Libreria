@@ -28,6 +28,7 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <start-class>com.proyecto.Libreria.LibreriaApplication</start-class>
     </properties>
     <dependencies>
 
@@ -69,21 +70,11 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>com.proyecto.Libreria.LibreriaApplication</mainClass>
+                
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -92,6 +83,7 @@
                     </excludes>
                 </configuration>
             </plugin>
+        
         </plugins>
     </build>
 

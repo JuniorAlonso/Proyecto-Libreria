@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Devolver Libro</title>
+</head>
+<body>
+    <h2>Devolver Libro</h2>
+
+    <form action="/usuario/procesarDevolucion" method="post">
+        <label>ID del libro:</label>
+        <input type="text" name="libroId" required><br><br>
+
+        <label>Nombre del libro:</label>
+        <input type="text" name="libroNombre" required><br><br>
+
+        <label>Multa a pagar:</label>
+        <input type="text" name="multa" th:value="${multa}" readonly><br><br>
+
+        <div th:if="${multa > 0}">
+            <h3>Pago de multa</h3>
+            <label>Número de tarjeta:</label>
+            <input type="text" name="tarjeta" maxlength="16" required><br><br>
+
+            <label>Fecha de vencimiento:</label>
+            <input type="month" name="vencimiento" required><br><br>
+
+            <label>CVC:</label>
+            <input type="text" name="cvc" maxlength="3" required><br><br>
+
+            <button type="submit">Pagar y devolver libro</button>
+        </div>
+
+        <div th:if="${multa == 0}">
+            <button type="submit">Devolver sin multa</button>
+        </div>
+    </form>
+
+    <p><a href="/usuario/inicio">Volver al inicio</a></p>
+</body>
+</html>

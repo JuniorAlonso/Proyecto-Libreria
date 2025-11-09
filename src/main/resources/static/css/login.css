@@ -1,0 +1,135 @@
+/*
+ * ----------------------------------------
+ * 1. Overrides Globales y Colores de Login
+ * ----------------------------------------
+ */
+/* Cambiamos el fondo del body SÓLO para estas páginas de login/registro */
+body.login-body {
+    background-color: #E6E6FA; /* Fondo morado claro, similar al del boceto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0; /* Padding para que no se pegue arriba/abajo en pantallas pequeñas */
+    min-height: 100vh;
+}
+
+/* El header flotante de Navegación */
+.login-header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    background: transparent;
+}
+
+/*
+ * ----------------------------------------
+ * 2. Estilos de los Contenedores Centrales
+ * ----------------------------------------
+ */
+.login-container, .register-container {
+    background-color: #A9A9A9; /* Fondo gris para los formularios */
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 450px; /* Ancho fijo para el login */
+    margin: 20px auto;
+}
+
+.register-container {
+    max-width: 700px; /* Más ancho para el registro de dos columnas */
+}
+
+.login-container h2, .register-container h2 {
+    text-align: center;
+    color: #333; /* Texto oscuro */
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+/* Estilos específicos para la sección de campos en dos columnas */
+.register-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas */
+    gap: 15px; /* Espacio entre los campos */
+    margin-bottom: 20px;
+}
+
+/* Asegurar que los campos en el grid ocupen su espacio */
+.register-fields input,
+.register-fields label {
+    grid-column: span 1;
+}
+
+/* Algunos campos que deben ocupar todo el ancho (ej. dirección) */
+.full-width {
+    grid-column: 1 / -1; /* Ocupa de la primera a la última columna */
+}
+
+
+/*
+ * ----------------------------------------
+ * 3. Elementos de Formulario (Usando estilos.css para el resto)
+ * ----------------------------------------
+ */
+
+/* Adaptamos los inputs para que se vean bien en el fondo gris */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Los botones ya deberían tomar el estilo de estilos.css, 
+   pero si quieres el morado de tu boceto: */
+.btn-morado {
+    background-color: #6A5ACD; /* Morado medio */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+    width: 100%; /* El botón principal ocupa todo el ancho */
+    margin-top: 10px;
+}
+
+.btn-morado:hover {
+    background-color: #483D8B; /* Morado oscuro al pasar el ratón */
+}
+
+/* Enlaces pequeños debajo del formulario */
+.form-footer a {
+    display: block;
+    text-align: center;
+    color: var(--color-principal, #004080); /* Usa el azul del proyecto */
+    text-decoration: none;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+/*
+ * ----------------------------------------
+ * 4. Responsividad Mínima
+ * ----------------------------------------
+ */
+@media (max-width: 700px) {
+    /* En pantallas pequeñas, la cuadrícula de registro pasa a una sola columna */
+    .register-fields {
+        grid-template-columns: 1fr;
+    }
+    .register-container {
+        padding: 20px;
+    }
+}

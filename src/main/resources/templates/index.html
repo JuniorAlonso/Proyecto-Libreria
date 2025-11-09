@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Librería</title>
+    <link rel="stylesheet" href="/src/main/resources/static/css/estilos.css">
+    <link rel="stylesheet" href="/src/main/resources/static/css/login.css">
+</head>
+
+<body class="login-body">
+
+    <header class="login-header">
+        <a th:href="@{/registro}" class="btn-morado">Registrar</a>
+        <a th:href="@{/}" class="btn-morado" style="margin-left: 10px;">Iniciar Sesión</a>
+    </header>
+
+    <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+        <form th:action="@{/login}" method="post">
+            <input type="text" name="username" placeholder="Usuario / Correo" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit" class="btn-morado">Iniciar Sesión</button>
+        </form>
+        <div class="form-footer">
+            <p>¿No tienes una cuenta? <a th:href="@{/registro}">Regístrate</a></p>
+        </div>
+    </div>
+
+</body>
+
+</html>

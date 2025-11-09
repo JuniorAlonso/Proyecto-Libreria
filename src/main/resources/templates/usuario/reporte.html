@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Préstamos</title>
+</head>
+<body>
+    <h2>Historial de Préstamos</h2>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Libro</th>
+                <th>Fecha de préstamo</th>
+                <th>Fecha de devolución</th>
+                <th>Días de plazo</th>
+                <th>Multa acumulada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="r : ${reportes}">
+                <td th:text="${r.libro}"></td>
+                <td th:text="${r.fechaPrestamo}"></td>
+                <td th:text="${r.fechaDevolucion}"></td>
+                <td th:text="${r.diasPlazo}"></td>
+                <td th:text="'S/ ' + ${r.multa}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p><a href="/usuario/inicio">Volver al inicio</a></p>
+</body>
+</html>

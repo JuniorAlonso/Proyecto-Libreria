@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil</title>
+</head>
+<body>
+    <h2>Bienvenido, <span th:text="${usuario.nombre}"></span>!</h2>
+    <p><strong>Correo:</strong> <span th:text="${usuario.correo}"></span></p>
+    <p><strong>Apellido:</strong> <span th:text="${usuario.apellido}"></span></p>
+    <a href="/usuario/login">Cerrar sesión</a>
+</body>
+</html>
