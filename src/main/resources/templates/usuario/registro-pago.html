@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Paso 2: Pago</title>
-    <link rel="stylesheet" href="/src/main/resources/static/css/estilos.css">
-    <link rel="stylesheet" href="/src/main/resources/static/css/login.css">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+
     <style>
         /* CSS adicional específico para los campos de tarjeta */
         .card-details {
@@ -14,6 +16,7 @@
             gap: 15px;
             margin-bottom: 20px;
         }
+
         .card-details input {
             /* Asegura que los campos cortos ocupen un tercio */
             width: 100%;
@@ -21,8 +24,9 @@
         }
     </style>
 </head>
+
 <body class="login-body">
-    
+
     <header class="login-header">
         <a th:href="@{/registro}" class="btn-morado">Registrar</a>
         <a th:href="@{/}" class="btn-morado" style="margin-left: 10px;">Iniciar Sesión</a>
@@ -30,23 +34,22 @@
 
     <div class="login-container">
         <h2>Registra la forma de pago</h2>
-        
-        <form th:action="@{/registro/finalizar}" method="post">
-            
-            <input type="text" name="numeroTarjeta" placeholder="Número de tarjeta" required>
-            
+
+        <form th:action="@{/registro-finalizar}" method="post" th:object="${usuario}">
+            <input type="text" th:field="*{numeroTarjeta}" placeholder="Número de tarjeta" required>
             <div class="card-details">
-                <input type="text" name="vencimiento" placeholder="MM/AA" required>
-                <input type="text" name="cvv" placeholder="CVV*" required>
+                <input type="text" th:field="*{fechaExpiracion}" placeholder="MM/AA" required>
+                <input type="text" th:field="*{cvv}" placeholder="CVV*" required>
             </div>
-            
             <button type="submit" class="btn-morado">Registrar</button>
         </form>
-        
+
+
         <div class="form-footer">
             <a th:href="@{/registro}" class="btn-link" style="text-align: left;">← Atrás</a>
         </div>
     </div>
 
 </body>
+
 </html>

@@ -22,9 +22,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Optional<Usuario> iniciarSesion(String correo, String contraseña) {
-        Optional<Usuario> usuario = usuarioRepository.findByCorreo(correo);
-        if (usuario.isPresent() && usuario.get().getContraseña().equals(contraseña)) {
+    public Optional<Usuario> iniciarSesion(String correo, String contrasena) {
+        Optional<Usuario> usuario = usuarioRepository.findByCorreo(correo.toLowerCase().trim());
+        if (usuario.isPresent() && usuario.get().getContrasena().trim().equals(contrasena.trim())) {
             return usuario;
         }
         return Optional.empty();

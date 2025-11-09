@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface UsuarioService {
     Usuario registrar(Usuario usuario);
-    Optional<Usuario> iniciarSesion(String correo, String contraseña);
+    Optional<Usuario> iniciarSesion(String correo, String contrasena);
     List<Usuario> listarUsuarios();
 }

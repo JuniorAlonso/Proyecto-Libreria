@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Paso 1</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+
+<body class="login-body">
+
+    <header class="login-header">
+        <a th:href="@{/registro}" class="btn-morado">Registrar</a>
+        <a th:href="@{/}" class="btn-morado" style="margin-left: 10px;">Iniciar Sesión</a>
+    </header>
+
+    <div class="register-container">
+        <h2>Regístrate</h2>
+        <form th:action="@{/registro-pago}" th:object="${usuario}" method="post">
+            <div class="register-fields">
+
+                <input type="text" th:field="*{nombreUsuario}" placeholder="Nombre de Usuario" required>
+                <input type="text" th:field="*{dui}" placeholder="DUI (o DNI/Cédula)" required>
+                <input type="text" th:field="*{primerApellido}" placeholder="Primer Apellido" required>
+                <input type="email" th:field="*{correo}" placeholder="E-mail" required>
+                <input type="password" th:field="*{contrasena}" placeholder="Contraseña" required>
+
+                <input type="tel" th:field="*{telefono}" placeholder="Teléfono" required>
+                <input type="text" th:field="*{nombreCompleto}" placeholder="Nombre Completo" required>
+                <input type="text" th:field="*{segundoApellido}" placeholder="Segundo Apellido">
+                <input type="text" th:field="*{direccion}" placeholder="Dirección" class="full-width" required>
+            </div>
+            <button type="submit" class="btn-morado">Confirmar</button>
+        </form>
+
+
+        <div class="form-footer">
+            <p>¿Ya tienes una cuenta? <a th:href="@{/}">Iniciar Sesión</a></p>
+        </div>
+    </div>
+
+</body>
+
+</html>
