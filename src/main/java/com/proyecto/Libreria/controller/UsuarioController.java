@@ -27,9 +27,9 @@ public class UsuarioController {
 
     @PostMapping("/iniciar-sesion")
     public String iniciarSesion(@RequestParam String correo,
-                                @RequestParam String contrasena,
-                                RedirectAttributes redirect,
-                                HttpSession session) {
+            @RequestParam String contrasena,
+            RedirectAttributes redirect,
+            HttpSession session) {
         correo = correo.toLowerCase().trim();
         contrasena = contrasena.trim();
 
@@ -42,7 +42,7 @@ public class UsuarioController {
             return "redirect:/";
         }
     }
-    
+
     // Método para inicializar el objeto Usuario para la sesión
     @ModelAttribute("usuario")
     public Usuario setupUsuario() {
@@ -67,25 +67,14 @@ public class UsuarioController {
 
     // Paso 3: recibe datos de pago, finaliza el registro y GUARDA
     @PostMapping("/registro-finalizar")
-    public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario, SessionStatus status) {
-        // ***************************************************************
-        // ✅ CORRECCIÓN CLAVE: ANULAR el ID antes de guardar
-        // Esto garantiza que, incluso si el ID se propagó accidentalmente 
-        // desde un formulario anterior o la sesión, JPA lo ignorará y 
-        // forzará la creación de un nuevo registro (INSERT).
-        // ***************************************************************
-        usuario.setId(null);
-        
+    public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario) {
+
         usuarioService.registrar(usuario);
-        
-        // Finaliza la sesión del objeto "usuario" para que no se mantenga un ID guardado
-        status.setComplete(); 
-        
+
         return "redirect:/"; // vuelve al login
     }
 
     // --- 3. DASHBOARD Y OTROS ---
-    
     @GetMapping("/usuario/inicio")
     public String mostrarDashboardInicio(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
