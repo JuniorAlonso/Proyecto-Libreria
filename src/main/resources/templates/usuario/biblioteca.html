@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca - Library</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            margin-left: 80px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .search-bar button {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .book-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .book-cover {
+            width: 100%;
+            height: 250px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .book-cover i {
+            font-size: 4rem;
+            color: #999;
+        }
+        
+        .book-title {
+            font-weight: 600;
+            color: var(--text-title-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .book-author {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-borrow {
+            width: 100%;
+            padding: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 60px;
+            width: 60px;
+            height: calc(100vh - 60px);
+            background: white;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 1rem;
+            gap: 1rem;
+        }
+        
+        .sidebar a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--icon-menu-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar a:hover {
+            background: var(--background-hover);
+            color: var(--text-selected-color);
+        }
+        
+        .sidebar a.active {
+            background: var(--background-selected);
+            color: var(--text-selected-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="left">
+            <div class="brand">
+                <i class="fa-solid fa-book" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+                <span class="name" style="font-size: 1.2rem; font-weight: 600; margin-left: 0.5rem;">LIBRARY</span>
+            </div>
+        </div>
+
+        <div class="right" style="display: flex; align-items: center; gap: 1rem;">
+            <span th:text="${usuario != null ? usuario.nombreCompleto : 'Usuario'}">Usuario</span>
+            <a th:href="@{/logout}" style="text-decoration: none;">
+                <i class="fa-solid fa-circle-user" style="font-size: 1.8rem; color: var(--icon-colo);"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a th:href="@{/usuario/inicio}" title="Inicio">
+            <i class="fa-solid fa-house"></i>
+        </a>
+        <a href="#" class="active" title="Biblioteca">
+            <i class="fa-solid fa-book"></i>
+        </a>
+        <a href="#" title="Préstamos">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+        </a>
+        <a href="#" title="Buscar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+        <a th:href="@{/logout}" title="Cerrar Sesión" style="margin-top: auto; margin-bottom: 1rem;">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1>BIBLIOTECA</h1>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar libros..." id="searchInput">
+                <button onclick="searchBooks()">
+                    <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                </button>
+            </div>
+        </div>
+
+        <div class="books-grid">
+            <!-- Libro 1 -->
+            <div class="book-card">
+                <div class="book-cover">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+                <div class="book-title">Libro de Ejemplo 1</div>
+                <div class="book-author">Autor Desconocido</div>
+                <button class="btn-borrow">Solicitar Préstamo</button>
+            </div>
+
+            <!-- Libro 2 -->
+            <div class="book-card">
+                <div class="book-cover">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+                <div class="book-title">Libro de Ejemplo 2</div>
+                <div class="book-author">Autor Desconocido</div>
+                <button class="btn-borrow">Solicitar Préstamo</button>
+            </div>
+
+            <!-- Libro 3 -->
+            <div class="book-card">
+                <div class="book-cover">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+                <div class="book-title">Libro de Ejemplo 3</div>
+                <div class="book-author">Autor Desconocido</div>
+                <button class="btn-borrow">Solicitar Préstamo</button>
+            </div>
+
+            <!-- Libro 4 -->
+            <div class="book-card">
+                <div class="book-cover">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+                <div class="book-title">Libro de Ejemplo 4</div>
+                <div class="book-author">Autor Desconocido</div>
+                <button class="btn-borrow">Solicitar Préstamo</button>
+            </div>
+
+            <!-- Libro 5 -->
+            <div class="book-card">
+                <div class="book-cover">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+                <div class="book-title">Libro de Ejemplo 5</div>
+                <div class="book-author">Autor Desconocido</div>
+                <button class="btn-borrow">Solicitar Préstamo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function searchBooks() {
+            const searchTerm = document.getElementById('searchInput').value;
+            alert('Buscando: ' + searchTerm);
+            // Aquí iría la lógica de búsqueda
+        }
+    </script>
+</body>
+</html>

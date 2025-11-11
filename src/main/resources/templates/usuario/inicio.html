@@ -1,40 +1,154 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenida</title>
-    <link rel="stylesheet" href="/src/main/resources/static/css/global.css">
+    <title>Inicio - Library</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .welcome-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .welcome-section h1 {
+            color: var(--text-title-color);
+            margin-bottom: 1rem;
+        }
+
+        .welcome-section p {
+            color: var(--text-color);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 60px;
+            width: 60px;
+            height: calc(100vh - 60px);
+            background: white;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 1rem;
+            gap: 1rem;
+        }
+
+        .sidebar a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--icon-menu-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: var(--background-hover);
+            color: var(--text-selected-color);
+        }
+
+        .sidebar a.active {
+            background: var(--background-selected);
+            color: var(--text-selected-color);
+        }
+    </style>
 </head>
+
 <body>
+    <!-- Header -->
     <header>
         <div class="left">
-            <div class="menu-container">
-                <div class="menu">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
             <div class="brand">
-                <img src="" alt="icon-libreria" class="logo">
-                <span class="name">Librery</span>
+                <i class="fa-solid fa-book" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+                <span class="name" style="font-size: 1.2rem; font-weight: 600; margin-left: 0.5rem;">LIBRARY</span>
             </div>
         </div>
 
-        <div class="right">
-            <a href="#">
-                <img src="../../static/imagenes/avatar-circle-user-solid-full.svg" alt="avatar">
+        <div class="right" style="display: flex; align-items: center; gap: 1rem;">
+            <span th:text="${usuario != null ? usuario.nombreCompleto : 'Usuario'}">Usuario</span>
+            <a th:href="@{/logout}" style="text-decoration: none;">
+                <i class="fa-solid fa-circle-user" style="font-size: 1.8rem; color: var(--icon-colo);"></i>
             </a>
-            <a href="#">
-                <i class="fa-solid fa-user"></i>
-            </a>
-            <a href="#">
-                <i class="fa-solid fa-user"></i>
-            </a>
-            <i class="fa-solid fa-circle-user"></i>
         </div>
     </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#" class="active" title="Inicio">
+            <i class="fa-solid fa-house"></i>
+        </a>
+        <a th:href="@{/usuario/biblioteca}" title="Biblioteca">
+            <i class="fa-solid fa-book"></i>
+        </a>
+        <a href="#" title="Préstamos">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+        </a>
+        <a href="#" title="Buscar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+        <a th:href="@{/logout}" title="Cerrar Sesión" style="margin-top: auto; margin-bottom: 1rem;">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-left: 80px;">
+        <div class="welcome-section">
+            <h1>¡Bienvenido <span th:text="${usuario != null ? usuario.nombreCompleto : 'Junior'}">Junior</span>!</h1>
+
+            <p>
+                Hola <strong th:text="${usuario != null ? usuario.nombreCompleto : 'Junior'}">Junior</strong>, nos
+                alegra verte
+                de nuevo en la plataforma de la
+                <strong>Library</strong>! Nos hará de alegría ayudarte nuevamente por acá.
+            </p>
+
+            <p>
+                Puedes buscar el libro de tu interés en el apartado de la <strong>Biblioteca</strong>, recuerda que la
+                <strong>ficha de devolución</strong> es importante para que puedas devolver el libro en el apartado de
+                la
+                <strong>Biblioteca</strong>. Nos hará de alegría ayudarte nuevamente por acá.
+            </p>
+
+            <div class="info-box">
+                <p style="margin: 0;">
+                    <i class="fa-solid fa-circle-info" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
+                    Puedes buscar el libro de tu interés en el apartado de la <strong>Biblioteca</strong>, recuerda que
+                    la
+                    <strong>ficha de devolución</strong> es importante para que puedas devolver el libro en el apartado
+                    de la
+                    <strong>Biblioteca</strong>. Nos hará de alegría ayudarte nuevamente por acá.
+                </p>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

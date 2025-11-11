@@ -86,7 +86,12 @@ public class UsuarioController {
     }
 
     @GetMapping("/usuario/biblioteca")
-    public String mostrarBiblioteca() {
+    public String mostrarBiblioteca(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null || usuario.getId() == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("usuario", usuario);
         return "usuario/biblioteca";
     }
 

@@ -38,16 +38,15 @@ public class UsuarioServiceImpl implements UsuarioService {
             String hashed = usuario.get().getContrasena();
             if (hashed != null) {
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-                // Intentamos comparar usando BCrypt. Si el valor almacenado no tiene formato BCrypt
-                // (por ejemplo, usuarios antiguos con contraseña en texto plano), matches() lanzará
-                // IllegalArgumentException; en ese caso hacemos un fallback a comparación en texto
-                // plano y, si coincide, re-hasheamos y guardamos el nuevo hash (migración automática).
-                try {
+                
+                // Verificar si la contraseña almacenada es un hash BCrypt
+                if (hashed.startsWith("$2a$") || hashed.startsWith("$2b$") || hashed.startsWith("$2y$")) {
+                    // Es un hash BCrypt, usar matches
                     if (encoder.matches(contrasena.trim(), hashed.trim())) {
                         return usuario;
                     }
-                } catch (IllegalArgumentException ex) {
-                    // Valor almacenado no es un hash BCrypt — intentamos comparar en texto plano
+                } else {
+                    // No es BCrypt, comparar en texto plano y migrar
                     if (contrasena.trim().equals(hashed.trim())) {
                         // Migrar a BCrypt: codificar la contraseña y guardar
                         usuario.get().setContrasena(encoder.encode(contrasena.trim()));
