@@ -17,8 +17,8 @@
     <!-- Header -->
     <header>
         <div class="left">
-           <div class="menu-container">
-                <div class="menu">
+            <div class="menu-container">
+                <div class="menu" id="menu">
                     <div></div>
                     <div></div>
                     <div></div>
@@ -27,44 +27,58 @@
 
             <div class="brand">
                 <i class="fa-solid fa-book"></i>
-                <span class="name" style="font-size: 1.2rem; font-weight: 600; margin-left: 0.5rem;">LIBRARY</span>
+                <span class="name">LIBRARY</span>
             </div>
         </div>
 
-        <div class="right" style="display: flex; align-items: center; gap: 1rem;">
+        <div class="right">
             <span th:text="${usuario != null ? usuario.nombreCompleto : 'Usuario'}">Usuario</span>
-            <a th:href="@{/logout}" style="text-decoration: none;">
-                <i class="fa-solid fa-circle-user" style="font-size: 1.8rem; color: var(--icon-colo);"></i>
+            <a th:href="@{/logout}">
+                <i class="fa-solid fa-circle-user"></i>
             </a>
         </div>
     </header>
 
     <!-- Sidebar -->
-    <div class="sidebar">
-        <a href="#" class="active" title="Inicio">
-            <i class="fa-solid fa-house"></i>
-            <span>Inicio</span>
-        </a>
-        <a th:href="@{/usuario/biblioteca}" title="Biblioteca">
-            <i class="fa-solid fa-book"></i>
-            <span>Biblioteca</span>
-        </a>
-        <a href="#" title="Préstamos">
-            <i class="fa-solid fa-hand-holding-heart"></i>
-            <span>Préstamos</span>
-        </a>
-        <a href="#" title="Buscar">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <span>Buscar</span>
-        </a>
-        <a th:href="@{/logout}" title="Cerrar Sesión" style="margin-top: auto; margin-bottom: 1rem;">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <span>Salir</span>
-        </a>
+    <div class="sidebar" id="sidebar">
+        <nav>
+            <ul>
+                <li>
+                    <a href="#" class="active" title="Inicio">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/usuario/biblioteca}" title="Biblioteca">
+                        <i class="fa-solid fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" title="Préstamos">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                        <span>Préstamos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" title="Buscar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Buscar</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/logout}" title="Cerrar Sesión">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Salir</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <!-- Main Content -->
-    <div class="main-content" style="margin-left: 80px;">
+    <div class="main-content">
         <div class="welcome-section">
             <h1>¡Bienvenido <span th:text="${usuario != null ? usuario.nombreCompleto : 'Junior'}">Junior</span>!</h1>
 
@@ -94,6 +108,8 @@
             </div>
         </div>
     </div>
+    <script src="../../static/js/script.js"></script>
+    <script th:src="@{/js/script.js}"></script>
 </body>
 
 </html>
