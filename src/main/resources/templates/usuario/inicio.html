@@ -1,66 +1,40 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Dashboard</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <title>Bienvenida</title>
+    <link rel="stylesheet" href="/src/main/resources/static/css/global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-
-    <div class="dashboard">
-        <aside class="sidebar">
-            <div class="sidebar__logo">LIBRERÍA 📚</div>
-            <ul class="sidebar__menu">
-                <li class="sidebar__item sidebar__item--activo">
-                    <a th:href="@{/usuario/inicio}"><span>Inicio</span></a>
-                </li>
-                <li class="sidebar__item">
-                    <a th:href="@{/usuario/biblioteca}"><span>Biblioteca</span></a>
-                </li>
-                <li class="sidebar__item">
-                    <a th:href="@{/usuario/prestamo}"><span>Préstamo</span></a>
-                </li>
-                <li class="sidebar__item">
-                    <a th:href="@{/usuario/devolver}"><span>Devolución / Multa</span></a>
-                </li>
-                <li class="sidebar__item">
-                    <a th:href="@{/usuario/reporte}"><span>Historial / Reporte</span></a>
-                </li>
-                <li class="sidebar__item">
-                    <a th:href="@{/usuario/perfil}"><span>Perfil</span></a>
-                </li>
-            </ul>
-            <div class="sidebar__pie">
-                Usuario: [[${usuario.nombre}]] <br> <a th:href="@{/logout}" style="color: #ccc;">Cerrar Sesión</a>
-            </div>
-        </aside>
-
-        <main class="contenido-principal">
-            
-            <header class="cabecera">
-                <h1 th:text="'Bienvenido(a) al Sistema, ' + ${usuario.nombre} + '!'">Bienvenido(a) al Sistema!</h1>
-                <p>Aquí puedes gestionar tus préstamos y devoluciones.</p>
-                <hr>
-            </header>
-            
-            <section class="tarjeta-informacion">
-                <h2>⚠️ Términos y Condiciones de Multas</h2>
-                <div class="alerta-multa">
-                    <p>Al utilizar nuestro servicio de préstamo, usted acepta los siguientes términos:</p>
-                    <ul>
-                        <li>El plazo máximo de préstamo es de **5 días calendario**.</li>
-                        <li>Si la devolución excede el plazo de 5 días, se generará una multa de **S/2.00 por cada día de retraso**.</li>
-                        <li>No podrá solicitar nuevos préstamos si tiene multas pendientes de pago o libros sin devolver.</li>
-                    </ul>
-                    <p style="font-weight: bold; margin-top: 15px;">Su puntualidad es clave para mantener nuestro servicio eficiente.</p>
+    <header>
+        <div class="left">
+            <div class="menu-container">
+                <div class="menu">
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
+            </div>
+            <div class="brand">
+                <img src="" alt="icon-libreria" class="logo">
+                <span class="name">Librery</span>
+            </div>
+        </div>
 
-                <button class="btn-principal">Entendido / Aceptar</button>
-            </section>
-            
-        </main>
-
-    </div>
+        <div class="right">
+            <a href="#">
+                <img src="../../static/imagenes/avatar-circle-user-solid-full.svg" alt="avatar">
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-user"></i>
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-user"></i>
+            </a>
+            <i class="fa-solid fa-circle-user"></i>
+        </div>
+    </header>
 </body>
 </html>

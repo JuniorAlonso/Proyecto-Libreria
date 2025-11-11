@@ -28,8 +28,8 @@ public class Usuario {
     @Column(name = "correo")
     private String correo; // antes era email
 
-    // MySQL tiene: contraseña (Asegúrate de que la columna usa tilde o ajusta aquí)
-    @Column(name = "contraseña") 
+    // MySQL tiene: contraseña (Aquí usamos la columna sin tilde para evitar problemas de nombres)
+    @Column(name = "contrasena") 
     private String contrasena; // Usamos 'contrasena' en Java, más fácil de escribir
 
     // --- Campos Adicionales del Formulario que NO están en tu tabla MySQL simple ---

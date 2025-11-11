@@ -79,3 +79,137 @@ p {
     border-radius: 5px;
     border: 1px solid #d8000c;
 }
+
+/* ===== Dashboard ===== */
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+    background-color: #F5F5F5; /* Fondo claro para el contenido */
+    font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    background-color: #800080; /* Púrpura oscuro */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 15px;
+}
+
+.sidebar__logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.sidebar__menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.sidebar__item {
+    margin-bottom: 15px;
+}
+
+.sidebar__item a {
+    color: #ccc;
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.sidebar__item a:hover,
+.sidebar__item--activo a {
+    background-color: #5d005d; /* Púrpura más oscuro al hover */
+    color: #fff;
+}
+
+.sidebar__pie {
+    font-size: 0.85em;
+    text-align: center;
+}
+
+/* Contenido principal */
+.contenido-principal {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: #F0F0FF; /* Fondo lila claro */
+}
+
+.cabecera h1 {
+    font-size: 2em;
+    color: #800080; /* Púrpura */
+    margin: 0 0 10px 0;
+}
+
+.cabecera p {
+    font-size: 1em;
+    color: #333;
+}
+
+/* Tarjeta de información */
+.tarjeta-informacion {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tarjeta-informacion h2 {
+    color: #800080;
+    margin-bottom: 15px;
+}
+
+.alerta-multa {
+    background-color: #fff0f5;
+    border-left: 5px solid #800080;
+    padding: 15px;
+    border-radius: 5px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.btn-principal {
+    background-color: #800080;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.btn-principal:hover {
+    background-color: #5d005d;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+    }
+    .sidebar__menu {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+    .contenido-principal {
+        padding: 20px;
+    }
+}

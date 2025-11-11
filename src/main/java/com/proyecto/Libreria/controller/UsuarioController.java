@@ -2,6 +2,7 @@ package com.proyecto.Libreria.controller;
 
 import com.proyecto.Libreria.model.Usuario;
 import com.proyecto.Libreria.service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,16 @@ public class UsuarioController {
     }
 
     @PostMapping("/iniciar-sesion")
-    public String iniciarSesion(@RequestParam String correo, @RequestParam String contrasena,
-                                RedirectAttributes redirect, Model model) {
+    public String iniciarSesion(@RequestParam String correo,
+            @RequestParam String contrasena,
+            RedirectAttributes redirect,
+            HttpSession session) { // <-- agregar HttpSession
+        correo = correo.toLowerCase().trim();
+        contrasena = contrasena.trim();
+
         var usuario = usuarioService.iniciarSesion(correo, contrasena);
         if (usuario.isPresent()) {
-            model.addAttribute("usuario", usuario.get());
+            session.setAttribute("usuario", usuario.get()); // <-- guardar en la sesión
             return "redirect:/usuario/inicio";
         } else {
             redirect.addFlashAttribute("error", "Correo o contraseña incorrectos");
@@ -37,7 +43,6 @@ public class UsuarioController {
     }
 
     // --- 2. REGISTRO (Flujo de 2 Pasos) ---
-
     // Paso 1: formulario de datos personales
     @GetMapping("/registro")
     public String mostrarRegistroPaso1(Model model) {
@@ -65,8 +70,19 @@ public class UsuarioController {
 
     // --- 3. DASHBOARD ---
     @GetMapping("/usuario/inicio")
-    public String mostrarDashboardInicio() {
+    public String mostrarDashboardInicio(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null || usuario.getId() == null) {
+            return "redirect:/"; // no hay sesión
+        }
+        model.addAttribute("usuario", usuario);
         return "usuario/inicio";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // termina sesión
+        return "redirect:/";
     }
 
     @GetMapping("/usuario/biblioteca")
