@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus; // Importar SessionStatus
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -26,29 +27,33 @@ public class UsuarioController {
 
     @PostMapping("/iniciar-sesion")
     public String iniciarSesion(@RequestParam String correo,
-            @RequestParam String contrasena,
-            RedirectAttributes redirect,
-            HttpSession session) { // <-- agregar HttpSession
+                                @RequestParam String contrasena,
+                                RedirectAttributes redirect,
+                                HttpSession session) {
         correo = correo.toLowerCase().trim();
         contrasena = contrasena.trim();
 
         var usuario = usuarioService.iniciarSesion(correo, contrasena);
         if (usuario.isPresent()) {
-            session.setAttribute("usuario", usuario.get()); // <-- guardar en la sesión
+            session.setAttribute("usuario", usuario.get());
             return "redirect:/usuario/inicio";
         } else {
             redirect.addFlashAttribute("error", "Correo o contraseña incorrectos");
             return "redirect:/";
         }
     }
+    
+    // Método para inicializar el objeto Usuario para la sesión
+    @ModelAttribute("usuario")
+    public Usuario setupUsuario() {
+        return new Usuario();
+    }
 
     // --- 2. REGISTRO (Flujo de 2 Pasos) ---
     // Paso 1: formulario de datos personales
     @GetMapping("/registro")
     public String mostrarRegistroPaso1(Model model) {
-        if (!model.containsAttribute("usuario")) {
-            model.addAttribute("usuario", new Usuario());
-        }
+        // La anotación @ModelAttribute("usuario") arriba ya asegura que haya un objeto Usuario nuevo en el modelo.
         return "usuario/registro"; // registro.html
     }
 
@@ -60,15 +65,27 @@ public class UsuarioController {
         return "usuario/registro-pago"; // registro-pago.html
     }
 
-    // Paso 3: recibe datos de pago y finaliza el registro
+    // Paso 3: recibe datos de pago, finaliza el registro y GUARDA
     @PostMapping("/registro-finalizar")
-    public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario) {
-        // Aquí 'usuario' ya tiene todos los datos personales + datos de pago
+    public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario, SessionStatus status) {
+        // ***************************************************************
+        // ✅ CORRECCIÓN CLAVE: ANULAR el ID antes de guardar
+        // Esto garantiza que, incluso si el ID se propagó accidentalmente 
+        // desde un formulario anterior o la sesión, JPA lo ignorará y 
+        // forzará la creación de un nuevo registro (INSERT).
+        // ***************************************************************
+        usuario.setId(null);
+        
         usuarioService.registrar(usuario);
+        
+        // Finaliza la sesión del objeto "usuario" para que no se mantenga un ID guardado
+        status.setComplete(); 
+        
         return "redirect:/"; // vuelve al login
     }
 
-    // --- 3. DASHBOARD ---
+    // --- 3. DASHBOARD Y OTROS ---
+    
     @GetMapping("/usuario/inicio")
     public String mostrarDashboardInicio(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
