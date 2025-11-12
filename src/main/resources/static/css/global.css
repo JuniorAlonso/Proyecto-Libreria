@@ -56,7 +56,6 @@ header {
 
 /* Left Section */
 .left {
-    border: 2px solid green;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -153,7 +152,6 @@ header {
 
 /* Right Section */
 .right {
-    border: 2px solid green;
     display: flex;
     justify-content: center;
     align-items: center;

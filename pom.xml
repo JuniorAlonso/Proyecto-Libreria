@@ -6,8 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.7</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+        <relativePath/> </parent>
     <groupId>com.proyecto</groupId>
     <artifactId>Libreria</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -30,35 +29,30 @@
         <java.version>21</java.version>
         <start-class>com.proyecto.Libreria.LibreriaApplication</start-class>
     </properties>
+
     <dependencies>
 
-        <!-- Spring Boot Starter Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Spring Boot Starter Data JPA (necesario para @Entity, @Table, etc.) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Conector de MySQL (para conectarte a tu base de datos) -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version> 
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Thymeleaf (para las vistas HTML en /templates) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <!-- Dependencia de testing (puede quedarse así) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -71,8 +65,6 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-
-
     <build>
         <plugins>
             <plugin>
@@ -80,7 +72,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>com.proyecto.Libreria.LibreriaApplication</mainClass>
-                
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -89,7 +80,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-        
         </plugins>
     </build>
 

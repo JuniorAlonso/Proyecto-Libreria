@@ -91,18 +91,9 @@ public class UsuarioController {
         return "redirect:/";
     }
 
-    @GetMapping("/usuario/biblioteca")
-    public String mostrarBiblioteca(HttpSession session, Model model) {
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null || usuario.getId() == null) {
-            return "redirect:/";
-        }
-        model.addAttribute("usuario", usuario);
-        return "usuario/biblioteca";
-    }
-
     @GetMapping("/usuario/perfil")
     public String mostrarPerfil() {
         return "usuario/perfil";
     }
+
 }

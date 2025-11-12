@@ -1,0 +1,144 @@
+
+/* Encabezado de Página */
+.page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-header h1 {
+    color: var(--text-title-color);
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+/* Contenedor principal de detalles del libro */
+.book-details-container {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    max-width: 600px; 
+    margin: 2rem auto; 
+}
+
+.book-details-container h2 {
+    color: var(--text-title-color);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Tarjeta de detalles del libro */
+.book-card-detail {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--radius);
+    background: var(--background-hover);
+}
+
+/* Icono/Portada del libro */
+.book-cover i {
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+/* Información del libro */
+.info p {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.info strong {
+    color: var(--text-title-color);
+    font-weight: 700;
+}
+
+.info span {
+    color: var(--text-color);
+    font-weight: 400;
+}
+
+/* Separador */
+hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 1.5rem 0;
+}
+
+/* Formulario de Confirmación */
+.borrow-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--text-title-color);
+    margin-bottom: 0.4rem;
+}
+
+.form-group input[type="text"] {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    background: #fcfcfc;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+/* Botones de Acción */
+.btn-confirm-borrow {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.btn-confirm-borrow:hover {
+    background-color: #2980b9; /
+}
+
+.btn-cancel {
+    display: block; 
+    text-align: center;
+    background-color: #e74c3c; 
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #c0392b;
+}
+
+/* Estilo para el mensaje de error si no se encuentra el libro */
+div[th\:unless="${libro != null}"] {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 2rem;
+    background-color: #fcebeb; 
+    border: 1px solid #e74c3c; 
+    border-radius: var(--radius);
+    color: #e74c3c;
+    font-weight: 600;
+}

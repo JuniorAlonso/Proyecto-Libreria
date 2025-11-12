@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca - Library</title>
+    <title>Prestamo - Library</title>
     <link rel="stylesheet" href="/src/main/resources/static/css/global.css">
-    <link rel="stylesheet" href="/src/main/resources/static/css/BibliotecaLibros.css">
+    <link rel="stylesheet" href="/src/main/resources/static/css/prestamos.css">
+
     <link rel="stylesheet" th:href="@{/css/global.css}">
     <link rel="stylesheet" th:href="@{/css/BibliotecaLibros.css}">
+    <link rel="stylesheet" th:href="@{/css/prestamos.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -49,13 +51,13 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/usuario/biblioteca}" class="active" title="Biblioteca">
+                    <a th:href="@{/usuario/biblioteca}" title="Biblioteca">
                         <i class="fa-solid fa-book"></i>
                         <span>Biblioteca</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/usuario/prestamos}" title="Préstamos">
+                    <a th:href="@{/usuario/prestamos}" class="active" title="Préstamos">
                         <i class="fa-solid fa-hand-holding-heart"></i>
                         <span>Préstamos</span>
                     </a>
@@ -76,41 +78,49 @@
         </nav>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main Content DETALLES-->
     <div class="main-content">
         <div class="page-header">
-            <h1>BIBLIOTECA</h1>
-            <div class="search-bar">
-                <input type="text" placeholder="Buscar libros..." id="searchInput">
-                <button onclick="searchBooks()">
-                    <i class="fa-solid fa-magnifying-glass"></i> Buscar
-                </button>
-            </div>
+            <h1>SOLICITUD DE PRÉSTAMO</h1>
         </div>
 
-        <div class="books-grid">
-            <!-- Libro 1 -->
-            <div class="book-card" th:each="libro : ${libros}">
+        <div th:if="${libro != null}" class="book-details-container">
+            <h2>Detalles del Libro:</h2>
+            <div class="book-card-detail">
                 <div class="book-cover">
                     <i class="fa-solid fa-book"></i>
                 </div>
-                <div class="book-title" th:text="${libro.titulo}">Libro de Ejemplo 1</div>
-                <div class="book-author" th:text="${libro.autor}">Autor Desconocido</div>
-                <a th:href="@{/usuario/prestamos/solicitar(libroId=${libro.id})}" class="btn-borrow">
-                    Solicitar Préstamo
-                </a>
+                <div class="info">
+                    <p><strong>Título:</strong> <span th:text="${libro.titulo}">Título del Libro</span></p>
+                    <p><strong>Autor:</strong> <span th:text="${libro.autor}">Autor del Libro</span></p>
+                    <p><strong>ID:</strong> <span th:text="${libro.id}">ID</span></p>
+                </div>
             </div>
+
+            <hr />
+
+            <h2>Confirma el Préstamo</h2>
+            <form th:action="@{/usuario/prestamos/confirmar}" method="post" class="borrow-form">
+                <input type="hidden" name="libroId" th:value="${libro.id}" />
+
+                <div class="form-group">
+                    <label for="fechaPrestamo">Fecha de Préstamo:</label>
+                    <input type="text" id="fechaPrestamo" th:value="${#dates.format(#dates.createNow(), 'dd-MM-yyyy')}"
+                        readonly />
+                </div>
+
+                <button type="submit" class="btn-confirm-borrow">Confirmar Préstamo</button>
+                <a th:href="@{/usuario/biblioteca}" class="btn-cancel">Cancelar y Volver</a>
+            </form>
+        </div>
+
+        <div th:unless="${libro != null}">
+            <p>⚠️ Error: No se encontró el libro solicitado.</p>
         </div>
     </div>
 
     <script src="../../static/js/script.js"></script>
-    <script>
-        function searchBooks() {
-            const searchTerm = document.getElementById('searchInput').value;
-            alert('Buscando: ' + searchTerm);
-            // Aquí iría la lógica de búsqueda
-        }
-    </script>
+
 </body>
 
 </html>
