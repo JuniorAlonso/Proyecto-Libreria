@@ -10,7 +10,7 @@ import org.springframework.web.bind.support.SessionStatus; // Importar SessionSt
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@SessionAttributes("usuario") // Mantiene el objeto Usuario en sesión entre pasos
+@SessionAttributes("usuario") 
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -19,10 +19,10 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    // --- 1. LOGIN ---
+    // LOGIN 
     @GetMapping("/")
     public String mostrarLogin(Model model) {
-        return "usuario/index"; // index.html
+        return "usuario/index";
     }
 
     @PostMapping("/iniciar-sesion")
@@ -49,37 +49,35 @@ public class UsuarioController {
         return new Usuario();
     }
 
-    // --- 2. REGISTRO (Flujo de 2 Pasos) ---
-    // Paso 1: formulario de datos personales
+    // REGISTRO 
+    // formulario
     @GetMapping("/registro")
     public String mostrarRegistroPaso1(Model model) {
-        // La anotación @ModelAttribute("usuario") arriba ya asegura que haya un objeto Usuario nuevo en el modelo.
         return "usuario/registro"; // registro.html
     }
 
-    // Paso 2: recibe los datos de registro (datos personales) y los mantiene en sesión
+    // recibe los datos d
     @PostMapping("/registro-pago")
     public String procesarRegistroPaso1(@ModelAttribute("usuario") Usuario usuario, Model model) {
-        // El objeto 'usuario' se mantiene en la sesión gracias a @SessionAttributes
         model.addAttribute("usuario", usuario);
-        return "usuario/registro-pago"; // registro-pago.html
+        return "usuario/registro-pago"; 
     }
 
-    // Paso 3: recibe datos de pago, finaliza el registro y GUARDA
+    // recibe datos de pago
     @PostMapping("/registro-finalizar")
     public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario) {
 
         usuarioService.registrar(usuario);
 
-        return "redirect:/"; // vuelve al login
+        return "redirect:/";
     }
 
-    // --- 3. DASHBOARD Y OTROS ---
+    // DASHBOARD
     @GetMapping("/usuario/inicio")
     public String mostrarDashboardInicio(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null || usuario.getId() == null) {
-            return "redirect:/"; // no hay sesión
+            return "redirect:/"; 
         }
         model.addAttribute("usuario", usuario);
         return "usuario/inicio";
@@ -87,7 +85,7 @@ public class UsuarioController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.invalidate(); // termina sesión
+        session.invalidate();
         return "redirect:/";
     }
 

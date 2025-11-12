@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-@Entity // Indica que esta clase es una entidad de JPA (una tabla en la DB)
+@Entity // Entidades para la Base de Datos
 public class Libro {
 
     @Id
@@ -15,20 +15,19 @@ public class Libro {
     private String titulo;
     private String autor;
     private String isbn;
-    private int stock; // Cantidad disponible
+    private int stock; 
 
-    // Constructor vacío (necesario para JPA)
     public Libro() {
     }
 
-    // Constructor con campos (útil para crear objetos para pruebas)
+    // Crea objetos para pruebas
     public Libro(Long id, String titulo, String autor) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
     }
 
-    // --- Getters y Setters ---
+    // Getters y Setters
 
     public Long getId() {
         return id;

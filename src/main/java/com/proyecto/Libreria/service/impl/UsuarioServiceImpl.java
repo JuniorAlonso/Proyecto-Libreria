@@ -39,16 +39,14 @@ public class UsuarioServiceImpl implements UsuarioService {
             if (hashed != null) {
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
                 
-                // Verificar si la contraseña almacenada es un hash BCrypt
+                // Verificar si la contraseña esta encriptada
                 if (hashed.startsWith("$2a$") || hashed.startsWith("$2b$") || hashed.startsWith("$2y$")) {
-                    // Es un hash BCrypt, usar matches
                     if (encoder.matches(contrasena.trim(), hashed.trim())) {
                         return usuario;
                     }
                 } else {
-                    // No es BCrypt, comparar en texto plano y migrar
                     if (contrasena.trim().equals(hashed.trim())) {
-                        // Migrar a BCrypt: codificar la contraseña y guardar
+                        // Codifica la contraseña y guardar
                         usuario.get().setContrasena(encoder.encode(contrasena.trim()));
                         usuarioRepository.save(usuario.get());
                         return usuario;

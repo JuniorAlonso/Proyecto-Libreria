@@ -9,6 +9,5 @@ public interface LibroService {
 
     Libro obtenerLibroPorId(Long id);
 
-    // Método para simular el registro de un préstamo
     void registrarPrestamo(Long libroId, Long usuarioId);
 }

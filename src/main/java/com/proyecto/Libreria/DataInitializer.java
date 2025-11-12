@@ -1,4 +1,3 @@
-
 package com.proyecto.Libreria;
 
 import com.proyecto.Libreria.model.Libro;
@@ -20,7 +19,7 @@ public class DataInitializer implements CommandLineRunner {
         if (libroRepository.count() == 0) {
             System.out.println("--- Inicializando datos de libros ---");
 
-            // Los libros se insertarán y tendrán IDs (1, 2, 3...)
+            // Los libros se insertarán 
 
             Libro l1 = new Libro();
             l1.setTitulo("Cien años de soledad");
@@ -40,7 +39,7 @@ public class DataInitializer implements CommandLineRunner {
             l3.setStock(8);
             libroRepository.save(l3);
 
-            System.out.println("--- Libros iniciales cargados: " + libroRepository.count());
+            System.out.println(" Libros iniciales cargados: " + libroRepository.count());
         }
     }
 }
