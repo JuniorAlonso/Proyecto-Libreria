@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="left">
+            <div class="brand">
+                <i class="fa-solid fa-book" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+                <span class="name" style="font-size: 1.2rem; font-weight: 600; margin-left: 0.5rem;">LIBRARY ADMIN</span>
+            </div>
+        </div>
+
+        <div class="right" style="display: flex; align-items: center; gap: 1rem;">
+            <a th:href="@{/usuario/inicio}" class="btn-volver-usuario" title="Volver al área de usuario">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Área Usuario</span>
+            </a>
+            <span th:text="${usuario != null ? usuario.nombreCompleto : 'Administrador'}">Administrador</span>
+            <a th:href="@{/logout}" style="text-decoration: none;">
+                <i class="fa-solid fa-circle-user" style="font-size: 1.8rem; color: var(--icon-colo);"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="sidebar">
+        <a th:href="@{/admin/dashboard}" title="Dashboard">
+            <i class="fa-solid fa-chart-line"></i>
+        </a>
+        <a th:href="@{/admin/libros}" title="Gestión de Libros">
+            <i class="fa-solid fa-book"></i>
+        </a>
+        <a href="#" class="active" title="Gestión de Usuarios">
+            <i class="fa-solid fa-users"></i>
+        </a>
+        <a th:href="@{/admin/reportes}" title="Reportes">
+            <i class="fa-solid fa-file-alt"></i>
+        </a>
+        <a th:href="@{/logout}" title="Cerrar Sesión" style="margin-top: auto; margin-bottom: 1rem;">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Gestión de Usuarios</h1>
+            <button class="btn-primary" onclick="openModal()">
+                <i class="fa-solid fa-plus"></i> Agregar Usuario
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="usuariosTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Los usuarios se cargarán dinámicamente con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para agregar/editar usuario -->
+    <div id="usuarioModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Agregar Usuario</h2>
+                <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="usuarioForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo</label>
+                    <input type="text" id="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" required>
+                </div>
+                <div class="form-group" id="contrasenaGroup">
+                    <label for="contrasena">Contraseña</label>
+                    <input type="password" id="contrasena">
+                </div>
+                <div class="form-group">
+                    <label for="rol">Rol</label>
+                    <select id="rol" required>
+                        <option value="USUARIO">Usuario</option>
+                        <option value="ADMIN">Administrador</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" id="telefono">
+                </div>
+                <button type="submit" class="btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <script th:src="@{/js/admin-usuarios.js}"></script>
+</body>
+</html>

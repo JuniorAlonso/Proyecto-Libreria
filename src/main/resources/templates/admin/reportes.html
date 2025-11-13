@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/reporte.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="left">
+            <div class="brand">
+                <i class="fa-solid fa-book" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+                <span class="name" style="font-size: 1.2rem; font-weight: 600; margin-left: 0.5rem;">LIBRARY ADMIN</span>
+            </div>
+        </div>
+
+        <div class="right" style="display: flex; align-items: center; gap: 1rem;">
+            <a th:href="@{/usuario/inicio}" class="btn-volver-usuario" title="Volver al área de usuario">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Área Usuario</span>
+            </a>
+            <span th:text="${usuario != null ? usuario.nombreCompleto : 'Administrador'}">Administrador</span>
+            <a th:href="@{/logout}" style="text-decoration: none;">
+                <i class="fa-solid fa-circle-user" style="font-size: 1.8rem; color: var(--icon-colo);"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="sidebar">
+        <a th:href="@{/admin/dashboard}" title="Dashboard">
+            <i class="fa-solid fa-chart-line"></i>
+        </a>
+        <a th:href="@{/admin/libros}" title="Gestión de Libros">
+            <i class="fa-solid fa-book"></i>
+        </a>
+        <a th:href="@{/admin/usuarios}" title="Gestión de Usuarios">
+            <i class="fa-solid fa-users"></i>
+        </a>
+        <a href="#" class="active" title="Reportes">
+            <i class="fa-solid fa-file-alt"></i>
+        </a>
+        <a th:href="@{/logout}" title="Cerrar Sesión" style="margin-top: auto; margin-bottom: 1rem;">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1>REPORTES DEL SISTEMA</h1>
+        </div>
+
+        <div class="filters">
+            <select id="filterTipo">
+                <option value="">Todos los préstamos</option>
+                <option value="activo">Activos</option>
+                <option value="devuelto">Devueltos</option>
+                <option value="vencido">Vencidos</option>
+            </select>
+            
+            <input type="date" id="filterFechaInicio" placeholder="Fecha inicio">
+            <input type="date" id="filterFechaFin" placeholder="Fecha fin">
+            
+            <button onclick="filtrarReporte()">
+                <i class="fa-solid fa-filter"></i> Filtrar
+            </button>
+            
+            <button class="btn-primary" onclick="exportarReporte()">
+                <i class="fa-solid fa-download"></i> Exportar
+            </button>
+        </div>
+
+        <div class="reporte-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Libro</th>
+                        <th>Fecha Préstamo</th>
+                        <th>Fecha Devolución</th>
+                        <th>Fecha Entrega</th>
+                        <th>Estado</th>
+                        <th>Multa</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="prestamo : ${prestamos}">
+                        <td><strong th:text="${prestamo.usuario.nombreCompleto}">Usuario</strong></td>
+                        <td th:text="${prestamo.libro.titulo}">Libro</td>
+                        <td th:text="${#temporals.format(prestamo.fechaPrestamo, 'dd/MM/yyyy')}">01/10/2025</td>
+                        <td th:text="${#temporals.format(prestamo.fechaDevolucion, 'dd/MM/yyyy')}">15/10/2025</td>
+                        <td th:text="${prestamo.fechaDevolucionReal != null ? #temporals.format(prestamo.fechaDevolucionReal, 'dd/MM/yyyy') : '-'}">-</td>
+                        <td>
+                            <span th:if="${prestamo.estado == 'DEVUELTO'}" class="estado-badge devuelto">
+                                <i class="fa-solid fa-check-circle"></i>
+                                Devuelto
+                            </span>
+                            <span th:if="${prestamo.estado == 'ACTIVO' and prestamo.vencido}" class="estado-badge vencido">
+                                <i class="fa-solid fa-exclamation-triangle"></i>
+                                Vencido
+                            </span>
+                            <span th:if="${prestamo.estado == 'ACTIVO' and !prestamo.vencido}" class="estado-badge activo">
+                                <i class="fa-solid fa-clock"></i>
+                                Activo
+                            </span>
+                        </td>
+                        <td th:style="${prestamo.vencido ? 'color: #dc3545; font-weight: 600;' : ''}">$0.00</td>
+                        <td>
+                            <button class="btn-delete" th:onclick="'eliminarPrestamo(' + ${prestamo.id} + ')'" title="Eliminar préstamo">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr th:if="${prestamos == null or prestamos.isEmpty()}">
+                        <td colspan="8" style="text-align: center; padding: 2rem; color: #6c757d;">
+                            <i class="fa-solid fa-inbox" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+                            No hay préstamos registrados
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function filtrarReporte() {
+            const tipo = document.getElementById('filterTipo').value;
+            const fechaInicio = document.getElementById('filterFechaInicio').value;
+            const fechaFin = document.getElementById('filterFechaFin').value;
+            
+            console.log('Filtrando:', { tipo, fechaInicio, fechaFin });
+            alert('Filtros aplicados');
+        }
+        
+        function exportarReporte() {
+            alert('Exportando reporte a Excel...');
+        }
+        
+        async function eliminarPrestamo(id) {
+            if (confirm('¿Estás seguro de eliminar este préstamo? Esta acción no se puede deshacer.')) {
+                try {
+                    const response = await fetch(`/api/prestamos/${id}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        alert('Préstamo eliminado exitosamente');
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar el préstamo');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error al eliminar el préstamo');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

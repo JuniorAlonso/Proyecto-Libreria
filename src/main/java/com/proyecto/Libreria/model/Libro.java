@@ -15,7 +15,8 @@ public class Libro {
     private String titulo;
     private String autor;
     private String isbn;
-    private int stock; 
+    private int stock;
+    private String imagenUrl; // URL o nombre de la imagen 
 
     public Libro() {
     }
@@ -67,5 +68,13 @@ public class Libro {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 }

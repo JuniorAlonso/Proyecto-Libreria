@@ -32,6 +32,14 @@
         </div>
 
         <div class="right">
+            <!-- Botón Gestionar solo para Administradores -->
+            <a th:if="${usuario != null and (usuario.rol == 'ADMIN' or usuario.rol == 'admin')}" 
+               th:href="@{/admin/dashboard}" 
+               class="btn-gestionar"
+               title="Panel de Administración">
+                <i class="fa-solid fa-gear"></i>
+                <span>Gestionar</span>
+            </a>
             <span th:text="${usuario != null ? usuario.nombreCompleto : 'Usuario'}">Usuario</span>
             <a th:href="@{/logout}">
                 <i class="fa-solid fa-circle-user"></i>
@@ -59,6 +67,13 @@
                     <a href="#" title="Préstamos">
                         <i class="fa-solid fa-hand-holding-heart"></i>
                         <span>Préstamos</span>
+                    </a>
+                </li>
+                <!-- Botón Gestionar solo para Administradores -->
+                <li th:if="${usuario != null and (usuario.rol == 'ADMIN' or usuario.rol == 'admin')}">
+                    <a th:href="@{/admin/dashboard}" title="Gestionar">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Gestionar</span>
                     </a>
                 </li>
                 <li>

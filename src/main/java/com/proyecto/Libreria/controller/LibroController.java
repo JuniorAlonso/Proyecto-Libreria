@@ -1,7 +1,9 @@
 package com.proyecto.Libreria.controller;
 
 import com.proyecto.Libreria.model.Libro;
+import com.proyecto.Libreria.model.Usuario;
 import com.proyecto.Libreria.service.LibroService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +23,15 @@ public class LibroController {
 
     // 1. Método para mostrar la biblioteca 
     @GetMapping("/biblioteca")
-    public String mostrarBiblioteca(Model model) {
+    public String mostrarBiblioteca(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null || usuario.getId() == null) {
+            return "redirect:/"; 
+        }
 
         List<Libro> libros = libroService.obtenerTodosLosLibros();
         model.addAttribute("libros", libros);
+        model.addAttribute("usuario", usuario);
 
         // Retorna la vista: 
         return "usuario/biblioteca";
@@ -32,7 +39,11 @@ public class LibroController {
 
     // 2. Método para mostrar préstamo 
     @GetMapping("/prestamos/solicitar")
-    public String mostrarFormularioPrestamo(@RequestParam("libroId") Long idLibro, Model model) {
+    public String mostrarFormularioPrestamo(@RequestParam("libroId") Long idLibro, HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null || usuario.getId() == null) {
+            return "redirect:/"; 
+        }
 
         Libro libroSeleccionado = libroService.obtenerLibroPorId(idLibro);
 
@@ -41,29 +52,56 @@ public class LibroController {
         }
 
         model.addAttribute("libro", libroSeleccionado);
+        model.addAttribute("usuario", usuario);
 
         return "usuario/prestamos";
     }
 
     // 3. Método para procesar la confirmación del préstamo
     @PostMapping("/prestamos/confirmar")
-    public String confirmarPrestamo(@RequestParam("libroId") Long idLibro, Model model) {
-
-        Long usuarioId = 1L; 
+    public String confirmarPrestamo(@RequestParam("libroId") Long idLibro, 
+                                   @RequestParam("fechaDevolucion") String fechaDevolucion,
+                                   HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null || usuario.getId() == null) {
+            return "redirect:/"; 
+        }
 
         try {
-            libroService.registrarPrestamo(idLibro, usuarioId);
+            // Validar que la fecha no exceda 15 días
+            java.time.LocalDate fechaDev = java.time.LocalDate.parse(fechaDevolucion);
+            java.time.LocalDate hoy = java.time.LocalDate.now();
+            java.time.LocalDate maxFecha = hoy.plusDays(15);
+            
+            if (fechaDev.isBefore(hoy) || fechaDev.isAfter(maxFecha)) {
+                return "redirect:/usuario/prestamos/solicitar?libroId=" + idLibro + "&error=La fecha debe estar entre hoy y máximo 15 días";
+            }
+            
+            libroService.registrarPrestamo(idLibro, usuario.getId(), fechaDev);
 
-            return "redirect:/usuario/prestamos?success=true";
+            return "redirect:/usuario/biblioteca?success=prestamo";
 
         } catch (Exception e) {
             return "redirect:/usuario/prestamos/solicitar?libroId=" + idLibro + "&error=" + e.getMessage();
         }
     }
 
+    @Autowired
+    private com.proyecto.Libreria.service.PrestamoService prestamoService;
+
     // 4. Método para mostrar la vista principal de Préstamos 
     @GetMapping("/prestamos")
-    public String mostrarListaPrestamos(Model model) {
+    public String mostrarListaPrestamos(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null || usuario.getId() == null) {
+            return "redirect:/"; 
+        }
+        
+        // Obtener préstamos del usuario
+        List<com.proyecto.Libreria.model.Prestamo> prestamos = prestamoService.obtenerPrestamosPorUsuario(usuario.getId());
+        
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("prestamos", prestamos);
         return "usuario/prestamos";
     }
 }

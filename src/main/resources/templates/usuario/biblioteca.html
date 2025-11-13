@@ -31,6 +31,14 @@
         </div>
 
         <div class="right">
+            <!-- Botón Gestionar solo para Administradores -->
+            <a th:if="${usuario != null and (usuario.rol == 'ADMIN' or usuario.rol == 'admin')}" 
+               th:href="@{/admin/dashboard}" 
+               class="btn-gestionar"
+               title="Panel de Administración">
+                <i class="fa-solid fa-gear"></i>
+                <span>Gestionar</span>
+            </a>
             <span th:text="${usuario != null ? usuario.nombreCompleto : 'Usuario'}">Usuario</span>
             <a th:href="@{/logout}">
                 <i class="fa-solid fa-circle-user"></i>
@@ -60,6 +68,13 @@
                         <span>Préstamos</span>
                     </a>
                 </li>
+                <!-- Botón Gestionar solo para Administradores -->
+                <li th:if="${usuario != null and (usuario.rol == 'ADMIN' or usuario.rol == 'admin')}">
+                    <a th:href="@{/admin/dashboard}" title="Gestionar">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Gestionar</span>
+                    </a>
+                </li>
                 <li>
                     <a href="#" title="Buscar">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -78,6 +93,13 @@
 
     <!-- Main Content -->
     <div class="main-content">
+        <!-- Mensaje de éxito -->
+        <div th:if="${param.success != null and param.success[0] == 'prestamo'}" 
+             style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+            <i class="fa-solid fa-check-circle"></i>
+            <strong>¡Préstamo confirmado exitosamente!</strong> El libro ha sido registrado en tus préstamos activos.
+        </div>
+        
         <div class="page-header">
             <h1>BIBLIOTECA</h1>
             <div class="search-bar">
@@ -89,9 +111,12 @@
         </div>
 
         <div class="books-grid">
-            <!-- Libro 1 -->
+            <!-- Libro -->
             <div class="book-card" th:each="libro : ${libros}">
-                <div class="book-cover">
+                <div class="book-cover" th:if="${libro.imagenUrl != null and !libro.imagenUrl.isEmpty()}">
+                    <img th:src="${libro.imagenUrl}" th:alt="${libro.titulo}" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="book-cover" th:unless="${libro.imagenUrl != null and !libro.imagenUrl.isEmpty()}">
                     <i class="fa-solid fa-book"></i>
                 </div>
                 <div class="book-title" th:text="${libro.titulo}">Libro de Ejemplo 1</div>

@@ -1,0 +1,133 @@
+/* Estilos para la página de reportes */
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filters select,
+.filters input[type="date"] {
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    min-width: 180px;
+    background: white;
+    transition: border-color 0.3s ease;
+}
+
+.filters select:focus,
+.filters input[type="date"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.filters button {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.filters button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.reporte-table {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+}
+
+.reporte-table table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+}
+
+.reporte-table thead {
+    background: var(--primary-color);
+    color: white;
+}
+
+.reporte-table th {
+    padding: 1.2rem 1rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reporte-table th:last-child {
+    border-right: none;
+}
+
+.reporte-table td {
+    padding: 1.2rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.reporte-table td:last-child {
+    border-right: none;
+}
+
+.reporte-table tbody tr:hover {
+    background: var(--background-hover);
+}
+
+.reporte-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Badges de estado */
+.estado-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.estado-badge.activo {
+    background: #d4edda;
+    color: #155724;
+}
+
+.estado-badge.devuelto {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.estado-badge.vencido {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.estado-badge i {
+    font-size: 0.9rem;
+}

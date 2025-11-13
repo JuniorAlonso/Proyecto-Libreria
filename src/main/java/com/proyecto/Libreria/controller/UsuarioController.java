@@ -10,7 +10,6 @@ import org.springframework.web.bind.support.SessionStatus; // Importar SessionSt
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@SessionAttributes("usuario") 
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -43,31 +42,43 @@ public class UsuarioController {
         }
     }
 
-    // Método para inicializar el objeto Usuario para la sesión
-    @ModelAttribute("usuario")
-    public Usuario setupUsuario() {
-        return new Usuario();
-    }
-
     // REGISTRO 
     // formulario
     @GetMapping("/registro")
     public String mostrarRegistroPaso1(Model model) {
+        model.addAttribute("usuario", new Usuario());
         return "usuario/registro"; // registro.html
     }
 
-    // recibe los datos d
+    // recibe los datos del primer paso
     @PostMapping("/registro-pago")
-    public String procesarRegistroPaso1(@ModelAttribute("usuario") Usuario usuario, Model model) {
+    public String procesarRegistroPaso1(@ModelAttribute("usuario") Usuario usuario, Model model, HttpSession session) {
+        // Guardar temporalmente en sesión
+        session.setAttribute("usuarioTemporal", usuario);
         model.addAttribute("usuario", usuario);
         return "usuario/registro-pago"; 
     }
 
-    // recibe datos de pago
+    // recibe datos de pago y finaliza el registro
     @PostMapping("/registro-finalizar")
-    public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario) {
-
-        usuarioService.registrar(usuario);
+    public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario, HttpSession session, RedirectAttributes redirect) {
+        // Recuperar datos del primer paso
+        Usuario usuarioTemporal = (Usuario) session.getAttribute("usuarioTemporal");
+        
+        if (usuarioTemporal != null) {
+            // Combinar datos
+            usuarioTemporal.setNumeroTarjeta(usuario.getNumeroTarjeta());
+            usuarioTemporal.setFechaExpiracion(usuario.getFechaExpiracion());
+            usuarioTemporal.setCvv(usuario.getCvv());
+            
+            // Registrar usuario
+            usuarioService.registrar(usuarioTemporal);
+            
+            // Limpiar sesión
+            session.removeAttribute("usuarioTemporal");
+            
+            redirect.addFlashAttribute("success", "Registro exitoso. Ahora puedes iniciar sesión.");
+        }
 
         return "redirect:/";
     }
@@ -90,7 +101,12 @@ public class UsuarioController {
     }
 
     @GetMapping("/usuario/perfil")
-    public String mostrarPerfil() {
+    public String mostrarPerfil(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null || usuario.getId() == null) {
+            return "redirect:/"; 
+        }
+        model.addAttribute("usuario", usuario);
         return "usuario/perfil";
     }
 

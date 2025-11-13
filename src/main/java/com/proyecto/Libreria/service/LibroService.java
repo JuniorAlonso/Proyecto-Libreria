@@ -9,5 +9,10 @@ public interface LibroService {
 
     Libro obtenerLibroPorId(Long id);
 
+    Libro guardarLibro(Libro libro);
+
+    void eliminarLibro(Long id);
+
     void registrarPrestamo(Long libroId, Long usuarioId);
+    void registrarPrestamo(Long libroId, Long usuarioId, java.time.LocalDate fechaDevolucion);
 }

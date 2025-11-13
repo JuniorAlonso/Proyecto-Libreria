@@ -37,6 +37,9 @@ public class Usuario {
     private String numeroTarjeta;
     private String fechaExpiracion;
     private String cvv;
+    
+    @Column(name = "rol")
+    private String rol; // "ADMIN" o "USUARIO"
 
     // CONSTRUCTORES 
 
@@ -91,5 +94,8 @@ public class Usuario {
 
     public String getCvv() { return cvv; }
     public void setCvv(String cvv) { this.cvv = cvv; }
+
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
 
 }

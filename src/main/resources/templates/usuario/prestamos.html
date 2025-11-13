@@ -5,11 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prestamo - Library</title>
-    <link rel="stylesheet" href="/src/main/resources/static/css/global.css">
-    <link rel="stylesheet" href="/src/main/resources/static/css/prestamos.css">
-
     <link rel="stylesheet" th:href="@{/css/global.css}">
-    <link rel="stylesheet" th:href="@{/css/BibliotecaLibros.css}">
     <link rel="stylesheet" th:href="@{/css/prestamos.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -33,6 +29,14 @@
         </div>
 
         <div class="right">
+            <!-- Botón Gestionar solo para Administradores -->
+            <a th:if="${usuario != null and (usuario.rol == 'ADMIN' or usuario.rol == 'admin')}" 
+               th:href="@{/admin/dashboard}" 
+               class="btn-gestionar"
+               title="Panel de Administración">
+                <i class="fa-solid fa-gear"></i>
+                <span>Gestionar</span>
+            </a>
             <span th:text="${usuario != null ? usuario.nombreCompleto : 'Usuario'}">Usuario</span>
             <a th:href="@{/logout}">
                 <i class="fa-solid fa-circle-user"></i>
@@ -62,6 +66,13 @@
                         <span>Préstamos</span>
                     </a>
                 </li>
+                <!-- Botón Gestionar solo para Administradores -->
+                <li th:if="${usuario != null and (usuario.rol == 'ADMIN' or usuario.rol == 'admin')}">
+                    <a th:href="@{/admin/dashboard}" title="Gestionar">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Gestionar</span>
+                    </a>
+                </li>
                 <li>
                     <a href="#" title="Buscar">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -81,9 +92,10 @@
     <!-- Main Content DETALLES-->
     <div class="main-content">
         <div class="page-header">
-            <h1>SOLICITUD DE PRÉSTAMO</h1>
+            <h1 th:text="${libro != null ? 'SOLICITUD DE PRÉSTAMO' : 'MIS PRÉSTAMOS'}">MIS PRÉSTAMOS</h1>
         </div>
 
+        <!-- Si hay un libro seleccionado, mostrar formulario de préstamo -->
         <div th:if="${libro != null}" class="book-details-container">
             <h2>Detalles del Libro:</h2>
             <div class="book-card-detail">
@@ -100,7 +112,7 @@
             <hr />
 
             <h2>Confirma el Préstamo</h2>
-            <form th:action="@{/usuario/prestamos/confirmar}" method="post" class="borrow-form">
+            <form th:action="@{/usuario/prestamos/confirmar}" method="post" class="borrow-form" id="prestamoForm">
                 <input type="hidden" name="libroId" th:value="${libro.id}" />
 
                 <div class="form-group">
@@ -109,13 +121,102 @@
                         readonly />
                 </div>
 
+                <div class="form-group">
+                    <label for="fechaDevolucion">Fecha de Devolución (máximo 15 días):</label>
+                    <input type="date" id="fechaDevolucion" name="fechaDevolucion" required />
+                    <small style="color: #6c757d; display: block; margin-top: 0.5rem;">
+                        Selecciona una fecha entre hoy y máximo 15 días después
+                    </small>
+                </div>
+
                 <button type="submit" class="btn-confirm-borrow">Confirmar Préstamo</button>
                 <a th:href="@{/usuario/biblioteca}" class="btn-cancel">Cancelar y Volver</a>
             </form>
+            
+            <script>
+                // Configurar fecha mínima (hoy) y máxima (15 días después)
+                const fechaInput = document.getElementById('fechaDevolucion');
+                const hoy = new Date();
+                const maxFecha = new Date();
+                maxFecha.setDate(hoy.getDate() + 15);
+                
+                // Formatear fechas a YYYY-MM-DD
+                const formatFecha = (fecha) => {
+                    const year = fecha.getFullYear();
+                    const month = String(fecha.getMonth() + 1).padStart(2, '0');
+                    const day = String(fecha.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                };
+                
+                fechaInput.min = formatFecha(hoy);
+                fechaInput.max = formatFecha(maxFecha);
+                fechaInput.value = formatFecha(maxFecha); // Por defecto 15 días
+                
+                // Validar al enviar el formulario
+                document.getElementById('prestamoForm').addEventListener('submit', function(e) {
+                    const fechaSeleccionada = new Date(fechaInput.value);
+                    if (fechaSeleccionada < hoy || fechaSeleccionada > maxFecha) {
+                        e.preventDefault();
+                        alert('La fecha de devolución debe estar entre hoy y máximo 15 días después.');
+                    }
+                });
+            </script>
         </div>
 
+        <!-- Si no hay libro seleccionado, mostrar lista de préstamos -->
         <div th:unless="${libro != null}">
-            <p>⚠️ Error: No se encontró el libro solicitado.</p>
+            <div style="text-align: center; padding: 2rem;">
+                <i class="fa-solid fa-book-open" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                <h2>Mis Préstamos Activos</h2>
+            </div>
+            
+            <!-- Si hay préstamos, mostrarlos -->
+            <div th:if="${prestamos != null and !prestamos.isEmpty()}" class="table-container" style="max-width: 1100px; margin: 2rem auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">Libro</th>
+                            <th style="width: 20%;">Autor</th>
+                            <th style="width: 15%;">Fecha Préstamo</th>
+                            <th style="width: 15%;">Fecha Devolución</th>
+                            <th style="width: 20%;">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="prestamo : ${prestamos}" th:if="${prestamo.estado == 'ACTIVO'}">
+                            <td>
+                                <strong th:text="${prestamo.libro.titulo}">Título</strong>
+                            </td>
+                            <td th:text="${prestamo.libro.autor}">Autor</td>
+                            <td th:text="${#temporals.format(prestamo.fechaPrestamo, 'dd/MM/yyyy')}">01/01/2024</td>
+                            <td th:text="${#temporals.format(prestamo.fechaDevolucion, 'dd/MM/yyyy')}">15/01/2024</td>
+                            <td>
+                                <span th:if="${prestamo.vencido}" class="estado-vencido">
+                                    <i class="fa-solid fa-exclamation-triangle"></i>
+                                    <span>Vencido</span>
+                                </span>
+                                <span th:unless="${prestamo.vencido}" class="estado-activo">
+                                    <i class="fa-solid fa-check-circle"></i>
+                                    <span>Activo</span>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Si no hay préstamos -->
+            <div th:if="${prestamos == null or prestamos.isEmpty()}" style="text-align: center; padding: 2rem;">
+                <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; max-width: 600px; margin: 0 auto;">
+                    <p style="margin-bottom: 1rem;">
+                        <i class="fa-solid fa-info-circle" style="color: var(--primary-color);"></i>
+                        No tienes préstamos activos. Para solicitar un préstamo, ve a la <strong>Biblioteca</strong> y haz clic en "Solicitar Préstamo" en el libro que desees.
+                    </p>
+                    <a th:href="@{/usuario/biblioteca}" class="btn-primary" style="display: inline-block; margin-top: 1rem;">
+                        <i class="fa-solid fa-book"></i> Ir a Biblioteca
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Libros - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="left">
+            <div class="brand">
+                <i class="fa-solid fa-book" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+                <span class="name" style="font-size: 1.2rem; font-weight: 600; margin-left: 0.5rem;">LIBRARY ADMIN</span>
+            </div>
+        </div>
+
+        <div class="right" style="display: flex; align-items: center; gap: 1rem;">
+            <a th:href="@{/usuario/inicio}" class="btn-volver-usuario" title="Volver al área de usuario">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Área Usuario</span>
+            </a>
+            <span th:text="${usuario != null ? usuario.nombreCompleto : 'Administrador'}">Administrador</span>
+            <a th:href="@{/logout}" style="text-decoration: none;">
+                <i class="fa-solid fa-circle-user" style="font-size: 1.8rem; color: var(--icon-colo);"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="sidebar">
+        <a th:href="@{/admin/dashboard}" title="Dashboard">
+            <i class="fa-solid fa-chart-line"></i>
+        </a>
+        <a href="#" class="active" title="Gestión de Libros">
+            <i class="fa-solid fa-book"></i>
+        </a>
+        <a th:href="@{/admin/usuarios}" title="Gestión de Usuarios">
+            <i class="fa-solid fa-users"></i>
+        </a>
+        <a th:href="@{/admin/reportes}" title="Reportes">
+            <i class="fa-solid fa-file-alt"></i>
+        </a>
+        <a th:href="@{/logout}" title="Cerrar Sesión" style="margin-top: auto; margin-bottom: 1rem;">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Gestión de Libros</h1>
+            <button class="btn-primary" onclick="openModal()">
+                <i class="fa-solid fa-plus"></i> Agregar Libro
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="librosTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>ISBN</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Los libros se cargarán dinámicamente con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para agregar/editar libro -->
+    <div id="libroModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Agregar Libro</h2>
+                <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="libroForm">
+                <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input type="text" id="titulo" required>
+                </div>
+                <div class="form-group">
+                    <label for="autor">Autor</label>
+                    <input type="text" id="autor" required>
+                </div>
+                <div class="form-group">
+                    <label for="isbn">ISBN</label>
+                    <input type="text" id="isbn" required>
+                </div>
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <input type="number" id="stock" required>
+                </div>
+                <div class="form-group">
+                    <label for="imagen">Imagen de Portada (Opcional)</label>
+                    <input type="file" id="imagen" accept="image/*">
+                    <small style="color: #6c757d; display: block; margin-top: 0.5rem;">
+                        Formatos aceptados: JPG, PNG, GIF (máx. 5MB)
+                    </small>
+                    <div id="imagenPreview" style="margin-top: 1rem; display: none;">
+                        <img id="previewImg" style="max-width: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let libroEditandoId = null;
+        let imagenActual = null;
+
+        function openModal() {
+            libroEditandoId = null;
+            imagenActual = null;
+            document.getElementById('libroModal').classList.add('active');
+            document.getElementById('modalTitle').textContent = 'Agregar Libro';
+            document.getElementById('libroForm').reset();
+            document.getElementById('imagenPreview').style.display = 'none';
+        }
+
+        function closeModal() {
+            document.getElementById('libroModal').classList.remove('active');
+            libroEditandoId = null;
+            imagenActual = null;
+        }
+
+        async function cargarLibros() {
+            try {
+                const response = await fetch('/api/libros');
+                const libros = await response.json();
+                const tbody = document.querySelector('#librosTable tbody');
+                tbody.innerHTML = '';
+                libros.forEach(libro => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${libro.id}</td>
+                        <td>${libro.titulo}</td>
+                        <td>${libro.autor}</td>
+                        <td>${libro.isbn || 'N/A'}</td>
+                        <td>${libro.stock}</td>
+                        <td>
+                            <button class="btn-edit" onclick="editLibro(${libro.id})">
+                                <i class="fa-solid fa-edit"></i> Editar
+                            </button>
+                            <button class="btn-delete" onclick="deleteLibro(${libro.id})">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error al cargar libros:', error);
+            }
+        }
+
+        async function editLibro(id) {
+            try {
+                const response = await fetch(`/api/libros/${id}`);
+                const libro = await response.json();
+                libroEditandoId = id;
+                imagenActual = libro.imagenUrl;
+                document.getElementById('libroModal').classList.add('active');
+                document.getElementById('modalTitle').textContent = 'Editar Libro';
+                document.getElementById('titulo').value = libro.titulo;
+                document.getElementById('autor').value = libro.autor;
+                document.getElementById('isbn').value = libro.isbn || '';
+                document.getElementById('stock').value = libro.stock;
+                if (libro.imagenUrl) {
+                    document.getElementById('previewImg').src = libro.imagenUrl;
+                    document.getElementById('imagenPreview').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error al cargar libro:', error);
+                alert('Error al cargar el libro');
+            }
+        }
+
+        async function deleteLibro(id) {
+            if (confirm('¿Estás seguro de eliminar este libro?')) {
+                try {
+                    const response = await fetch(`/api/libros/${id}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        alert('Libro eliminado exitosamente');
+                        cargarLibros();
+                    } else {
+                        const errorMsg = await response.text();
+                        alert(errorMsg || 'Error al eliminar el libro');
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar libro:', error);
+                    alert('Error al eliminar el libro: ' + error.message);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarLibros();
+            
+            document.getElementById('imagen').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('previewImg').src = e.target.result;
+                        document.getElementById('imagenPreview').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            document.getElementById('libroForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                let imagenUrl = imagenActual;
+                const imagenFile = document.getElementById('imagen').files[0];
+                if (imagenFile) {
+                    const formData = new FormData();
+                    formData.append('imagen', imagenFile);
+                    try {
+                        const uploadResponse = await fetch('/api/imagenes/upload', { method: 'POST', body: formData });
+                        if (uploadResponse.ok) {
+                            imagenUrl = await uploadResponse.text();
+                        }
+                    } catch (error) {
+                        console.error('Error al subir imagen:', error);
+                    }
+                }
+                const libro = {
+                    titulo: document.getElementById('titulo').value,
+                    autor: document.getElementById('autor').value,
+                    isbn: document.getElementById('isbn').value,
+                    stock: parseInt(document.getElementById('stock').value),
+                    imagenUrl: imagenUrl
+                };
+                try {
+                    const url = libroEditandoId ? `/api/libros/${libroEditandoId}` : '/api/libros';
+                    const method = libroEditandoId ? 'PUT' : 'POST';
+                    const response = await fetch(url, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(libro) });
+                    if (response.ok) {
+                        alert('Libro guardado exitosamente');
+                        closeModal();
+                        cargarLibros();
+                    } else {
+                        alert('Error al guardar el libro');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error al guardar el libro');
+                }
+            });
+
+            document.getElementById('libroModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
