@@ -1,6 +1,6 @@
-package com.proyecto.Libreria.controller;
+package com.proyecto.Libreria.controlador;
 
-import com.proyecto.Libreria.model.Usuario;
+import com.proyecto.Libreria.entidad.Usuario;
 import com.proyecto.Libreria.service.DashboardService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,11 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminControlador {
 
     private final DashboardService dashboardService;
 
-    public AdminController(DashboardService dashboardService) {
+    public AdminControlador(DashboardService dashboardService) {
         this.dashboardService = dashboardService;
     }
 
@@ -75,10 +75,10 @@ public class AdminController {
         }
         
         // Obtener todos los préstamos
-        java.util.List<com.proyecto.Libreria.model.Prestamo> prestamos = prestamoService.obtenerPrestamosActivos();
+        java.util.List<com.proyecto.Libreria.entidad.Prestamo> prestamos = prestamoService.obtenerPrestamosActivos();
         
         // También obtener todos los préstamos (activos y devueltos)
-        java.util.List<com.proyecto.Libreria.model.Prestamo> todosPrestamos = 
+        java.util.List<com.proyecto.Libreria.entidad.Prestamo> todosPrestamos = 
             prestamoRepository.findAll();
         
         model.addAttribute("usuario", usuario);
@@ -87,5 +87,5 @@ public class AdminController {
     }
     
     @Autowired
-    private com.proyecto.Libreria.repository.PrestamoRepository prestamoRepository;
+    private com.proyecto.Libreria.repositorio.PrestamoRepositorio prestamoRepository;
 }

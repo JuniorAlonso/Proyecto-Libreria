@@ -1,16 +1,16 @@
 package com.proyecto.Libreria;
 
-import com.proyecto.Libreria.model.Libro;
-import com.proyecto.Libreria.repository.LibroRepository;
+import com.proyecto.Libreria.entidad.Libro;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import com.proyecto.Libreria.repositorio.LibroRepositorio;
 
 @Component
-public class DataInitializer implements CommandLineRunner {
+public class InicializadorDatos implements CommandLineRunner {
 
-    private final LibroRepository libroRepository;
+    private final LibroRepositorio libroRepository;
 
-    public DataInitializer(LibroRepository libroRepository) {
+    public InicializadorDatos(LibroRepositorio libroRepository) {
         this.libroRepository = libroRepository;
     }
 

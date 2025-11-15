@@ -122,10 +122,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="fechaDevolucion">Fecha de Devolución (máximo 15 días):</label>
+                    <label for="fechaDevolucion">Fecha de Devolución (máximo 5 días):</label>
                     <input type="date" id="fechaDevolucion" name="fechaDevolucion" required />
                     <small style="color: #6c757d; display: block; margin-top: 0.5rem;">
-                        Selecciona una fecha entre hoy y máximo 15 días después
+                        Selecciona una fecha entre hoy y máximo 5 días después
                     </small>
                 </div>
 
@@ -138,7 +138,7 @@
                 const fechaInput = document.getElementById('fechaDevolucion');
                 const hoy = new Date();
                 const maxFecha = new Date();
-                maxFecha.setDate(hoy.getDate() + 15);
+                maxFecha.setDate(hoy.getDate() + 5);
                 
                 // Formatear fechas a YYYY-MM-DD
                 const formatFecha = (fecha) => {
@@ -189,7 +189,7 @@
                             </td>
                             <td th:text="${prestamo.libro.autor}">Autor</td>
                             <td th:text="${#temporals.format(prestamo.fechaPrestamo, 'dd/MM/yyyy')}">01/01/2024</td>
-                            <td th:text="${#temporals.format(prestamo.fechaDevolucion, 'dd/MM/yyyy')}">15/01/2024</td>
+                            <td th:text="${#temporals.format(prestamo.fechaDevolucion, 'dd/MM/yyyy')}">5/01/2024</td>
                             <td>
                                 <span th:if="${prestamo.vencido}" class="estado-vencido">
                                     <i class="fa-solid fa-exclamation-triangle"></i>

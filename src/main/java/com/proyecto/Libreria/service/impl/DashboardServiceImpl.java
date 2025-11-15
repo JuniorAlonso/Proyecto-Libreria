@@ -1,25 +1,25 @@
 package com.proyecto.Libreria.service.impl;
 
-import com.proyecto.Libreria.repository.LibroRepository;
-import com.proyecto.Libreria.repository.PrestamoRepository;
-import com.proyecto.Libreria.repository.UsuarioRepository;
 import com.proyecto.Libreria.service.DashboardService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import com.proyecto.Libreria.repositorio.LibroRepositorio;
+import com.proyecto.Libreria.repositorio.PrestamoRepositorio;
+import com.proyecto.Libreria.repositorio.UsuarioRepositorio;
 
 @Service
 public class DashboardServiceImpl implements DashboardService {
 
-    private final LibroRepository libroRepository;
-    private final UsuarioRepository usuarioRepository;
-    private final PrestamoRepository prestamoRepository;
+    private final LibroRepositorio libroRepository;
+    private final UsuarioRepositorio usuarioRepository;
+    private final PrestamoRepositorio prestamoRepository;
 
-    public DashboardServiceImpl(LibroRepository libroRepository, 
-                                UsuarioRepository usuarioRepository,
-                                PrestamoRepository prestamoRepository) {
+    public DashboardServiceImpl(LibroRepositorio libroRepository, 
+                                UsuarioRepositorio usuarioRepository,
+                                PrestamoRepositorio prestamoRepository) {
         this.libroRepository = libroRepository;
         this.usuarioRepository = usuarioRepository;
         this.prestamoRepository = prestamoRepository;

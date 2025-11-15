@@ -1,19 +1,19 @@
 package com.proyecto.Libreria.service.impl;
 
-import com.proyecto.Libreria.model.Libro;
-import com.proyecto.Libreria.repository.LibroRepository;
+import com.proyecto.Libreria.entidad.Libro;
 import com.proyecto.Libreria.service.LibroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import com.proyecto.Libreria.repositorio.LibroRepositorio;
 
 @Service
 public class LibroServiceImpl implements LibroService {
 
     @Autowired
-    private LibroRepository libroRepository;
+    private LibroRepositorio libroRepository;
 
     @Override
     public List<Libro> obtenerTodosLosLibros() {
@@ -37,7 +37,7 @@ public class LibroServiceImpl implements LibroService {
     public void eliminarLibro(Long id) {
         try {
             // Verificar si hay préstamos activos con este libro
-            List<com.proyecto.Libreria.model.Prestamo> prestamosActivos = prestamoRepository.findAll().stream()
+            List<com.proyecto.Libreria.entidad.Prestamo> prestamosActivos = prestamoRepository.findAll().stream()
                     .filter(p -> p.getLibro().getId().equals(id) && "ACTIVO".equals(p.getEstado()))
                     .toList();
             
@@ -52,10 +52,10 @@ public class LibroServiceImpl implements LibroService {
     }
 
     @Autowired
-    private com.proyecto.Libreria.repository.PrestamoRepository prestamoRepository;
+    private com.proyecto.Libreria.repositorio.PrestamoRepositorio prestamoRepository;
     
     @Autowired
-    private com.proyecto.Libreria.repository.UsuarioRepository usuarioRepository;
+    private com.proyecto.Libreria.repositorio.UsuarioRepositorio usuarioRepository;
 
     @Override
     public void registrarPrestamo(Long libroId, Long usuarioId) {
@@ -73,9 +73,9 @@ public class LibroServiceImpl implements LibroService {
             libroRepository.save(libro); 
 
             // Crear el registro del préstamo
-            com.proyecto.Libreria.model.Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+            com.proyecto.Libreria.entidad.Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
             if (usuario != null) {
-                com.proyecto.Libreria.model.Prestamo prestamo = new com.proyecto.Libreria.model.Prestamo();
+                com.proyecto.Libreria.entidad.Prestamo prestamo = new com.proyecto.Libreria.entidad.Prestamo();
                 prestamo.setLibro(libro);
                 prestamo.setUsuario(usuario);
                 prestamo.setFechaPrestamo(java.time.LocalDate.now());

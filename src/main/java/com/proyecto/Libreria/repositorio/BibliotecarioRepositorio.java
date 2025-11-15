@@ -1,16 +1,16 @@
-package com.proyecto.Libreria.repository;
+package com.proyecto.Libreria.repositorio;
 
-import com.proyecto.Libreria.model.Bibliotecario;
+import com.proyecto.Libreria.entidad.Bibliotecario;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class BibliotecarioRepository {
+public class BibliotecarioRepositorio {
 
     private final Map<String, Bibliotecario> bibliotecarios = new HashMap<>();
 
-    public BibliotecarioRepository() {
+    public BibliotecarioRepositorio() {
 
         bibliotecarios.put("admin", new Bibliotecario("admin", "password123"));
         bibliotecarios.put("bibliotecario1", new Bibliotecario("bibliotecario1", "pass456"));

@@ -1,6 +1,6 @@
 package com.proyecto.Libreria.service;
 
-import com.proyecto.Libreria.model.Usuario;
+import com.proyecto.Libreria.entidad.Usuario;
 import java.util.List;
 import java.util.Optional;
 

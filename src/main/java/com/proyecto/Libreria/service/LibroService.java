@@ -1,6 +1,6 @@
 package com.proyecto.Libreria.service;
 
-import com.proyecto.Libreria.model.Libro;
+import com.proyecto.Libreria.entidad.Libro;
 import java.util.List;
 
 public interface LibroService {

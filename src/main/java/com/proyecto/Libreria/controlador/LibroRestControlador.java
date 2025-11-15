@@ -1,6 +1,6 @@
-package com.proyecto.Libreria.controller;
+package com.proyecto.Libreria.controlador;
 
-import com.proyecto.Libreria.model.Libro;
+import com.proyecto.Libreria.entidad.Libro;
 import com.proyecto.Libreria.service.LibroService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,11 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/libros")
-public class LibroRestController {
+public class LibroRestControlador {
 
     private final LibroService libroService;
 
-    public LibroRestController(LibroService libroService) {
+    public LibroRestControlador(LibroService libroService) {
         this.libroService = libroService;
     }
 

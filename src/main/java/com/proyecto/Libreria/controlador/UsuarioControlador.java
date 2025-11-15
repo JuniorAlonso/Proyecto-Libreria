@@ -1,6 +1,6 @@
-package com.proyecto.Libreria.controller;
+package com.proyecto.Libreria.controlador;
 
-import com.proyecto.Libreria.model.Usuario;
+import com.proyecto.Libreria.entidad.Usuario;
 import com.proyecto.Libreria.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -10,11 +10,11 @@ import org.springframework.web.bind.support.SessionStatus; // Importar SessionSt
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class UsuarioController {
+public class UsuarioControlador {
 
     private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioControlador(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 

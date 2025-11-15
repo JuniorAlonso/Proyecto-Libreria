@@ -1,4 +1,4 @@
-package com.proyecto.Libreria.model;
+package com.proyecto.Libreria.entidad;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;

@@ -1,7 +1,7 @@
-package com.proyecto.Libreria.controller;
+package com.proyecto.Libreria.controlador;
 
-import com.proyecto.Libreria.model.Libro;
-import com.proyecto.Libreria.model.Usuario;
+import com.proyecto.Libreria.entidad.Libro;
+import com.proyecto.Libreria.entidad.Usuario;
 import com.proyecto.Libreria.service.LibroService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/usuario")
-public class LibroController {
+public class LibroControlador {
 
     @Autowired
     private LibroService libroService;
@@ -98,7 +98,7 @@ public class LibroController {
         }
         
         // Obtener préstamos del usuario
-        List<com.proyecto.Libreria.model.Prestamo> prestamos = prestamoService.obtenerPrestamosPorUsuario(usuario.getId());
+        List<com.proyecto.Libreria.entidad.Prestamo> prestamos = prestamoService.obtenerPrestamosPorUsuario(usuario.getId());
         
         model.addAttribute("usuario", usuario);
         model.addAttribute("prestamos", prestamos);

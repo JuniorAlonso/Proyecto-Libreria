@@ -1,19 +1,19 @@
 package com.proyecto.Libreria.service.impl;
 
-import com.proyecto.Libreria.model.Usuario;
-import com.proyecto.Libreria.repository.UsuarioRepository;
+import com.proyecto.Libreria.entidad.Usuario;
 import com.proyecto.Libreria.service.UsuarioService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.proyecto.Libreria.repositorio.UsuarioRepositorio;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioRepositorio usuarioRepository;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
+    public UsuarioServiceImpl(UsuarioRepositorio usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 

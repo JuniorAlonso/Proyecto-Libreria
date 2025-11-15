@@ -1,6 +1,6 @@
-package com.proyecto.Libreria.controller;
+package com.proyecto.Libreria.controlador;
 
-import com.proyecto.Libreria.model.Usuario;
+import com.proyecto.Libreria.entidad.Usuario;
 import com.proyecto.Libreria.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,11 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
-public class UsuarioRestController {
+public class UsuarioRestControlador {
 
     private final UsuarioService usuarioService;
 
-    public UsuarioRestController(UsuarioService usuarioService) {
+    public UsuarioRestControlador(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 

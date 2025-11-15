@@ -1,19 +1,19 @@
 package com.proyecto.Libreria.service.impl;
 
-import com.proyecto.Libreria.model.Prestamo;
-import com.proyecto.Libreria.repository.PrestamoRepository;
+import com.proyecto.Libreria.entidad.Prestamo;
 import com.proyecto.Libreria.service.PrestamoService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import com.proyecto.Libreria.repositorio.PrestamoRepositorio;
 
 @Service
 public class PrestamoServiceImpl implements PrestamoService {
 
-    private final PrestamoRepository prestamoRepository;
+    private final PrestamoRepositorio prestamoRepository;
 
-    public PrestamoServiceImpl(PrestamoRepository prestamoRepository) {
+    public PrestamoServiceImpl(PrestamoRepositorio prestamoRepository) {
         this.prestamoRepository = prestamoRepository;
     }
 

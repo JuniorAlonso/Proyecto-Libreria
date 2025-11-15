@@ -1,4 +1,4 @@
-package com.proyecto.Libreria.controller;
+package com.proyecto.Libreria.controlador;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/imagenes")
-public class ImagenController {
+public class ImagenControlador {
 
     private final String UPLOAD_DIR = "src/main/resources/static/uploads/libros/";
 

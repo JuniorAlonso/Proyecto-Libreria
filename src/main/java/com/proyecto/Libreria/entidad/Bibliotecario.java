@@ -1,4 +1,4 @@
-package com.proyecto.Libreria.model;
+package com.proyecto.Libreria.entidad;
 
 public class Bibliotecario {
     private String usuario;

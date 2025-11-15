@@ -1,4 +1,4 @@
-package com.proyecto.Libreria.controller;
+package com.proyecto.Libreria.controlador;
 
 import com.proyecto.Libreria.service.PrestamoService;
 import org.springframework.http.ResponseEntity;
@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/prestamos")
-public class PrestamoRestController {
+public class PrestamoRestControlador {
 
     private final PrestamoService prestamoService;
 
-    public PrestamoRestController(PrestamoService prestamoService) {
+    public PrestamoRestControlador(PrestamoService prestamoService) {
         this.prestamoService = prestamoService;
     }
 
