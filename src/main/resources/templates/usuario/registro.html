@@ -4,42 +4,382 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Paso 1</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
-    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <title>Registro - Librería</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .dni-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .dni-group input {
+            flex: 1;
+            /* Input toma todo el espacio disponible */
+            min-width: 0;
+            /* Permite que el input se encoja si es necesario */
+        }
+
+        .btn-search {
+            flex: 0 0 85px;
+            /* Botón con ancho fijo de 85px */
+            padding: 12px 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-search:active {
+            transform: translateY(0);
+        }
+
+        .btn-search:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .form-footer p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .form-footer a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .register-container {
+                padding: 30px 20px;
+            }
+
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .dni-group {
+                flex-direction: column;
+            }
+
+            .btn-search {
+                width: 100%;
+                flex: 1;
+            }
+        }
+
+        .btn-search.loading::after {
+            content: "";
+            width: 12px;
+            height: 12px;
+            margin-left: 6px;
+            border: 2px solid #ffffff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
-<body class="login-body">
-
-    <header class="login-header">
-        <a th:href="@{/registro}" class="btn-morado">Registrar</a>
-        <a th:href="@{/}" class="btn-morado" style="margin-left: 10px;">Iniciar Sesión</a>
-    </header>
+<body>
 
     <div class="register-container">
-        <h2>Regístrate</h2>
+        <h2>Crear Cuenta</h2>
+        <p class="subtitle">Completa tus datos para registrarte</p>
+
         <form th:action="@{/registro-pago}" th:object="${usuario}" method="post">
-            <div class="register-fields">
 
-                <input type="text" th:field="*{nombreUsuario}" placeholder="Nombre de Usuario" required>
-                <input type="text" th:field="*{dui}" placeholder="DUI (o DNI/Cédula)" required>
-                <input type="text" th:field="*{primerApellido}" placeholder="Primer Apellido" required>
-                <input type="email" th:field="*{correo}" placeholder="E-mail" required>
-                <input type="password" th:field="*{contrasena}" placeholder="Contraseña" required>
-
-                <input type="tel" th:field="*{telefono}" placeholder="Teléfono" required>
-                <input type="text" th:field="*{nombreCompleto}" placeholder="Nombre Completo" required>
-                <input type="text" th:field="*{segundoApellido}" placeholder="Segundo Apellido">
-                <input type="text" th:field="*{direccion}" placeholder="Dirección" class="full-width" required>
+            <div class="form-group">
+                <label for="nombreUsuario">Nombre de Usuario</label>
+                <input type="text" id="nombreUsuario" th:field="*{nombreUsuario}"
+                    placeholder="Ingresa tu nombre de usuario" required>
             </div>
-            <button type="submit" class="btn-morado">Confirmar</button>
-        </form>
 
+            <div class="form-group">
+                <label for="dniInput">DNI / Cédula</label>
+                <div class="dni-group">
+                    <input type="text" id="dniInput" th:field="*{dui}" placeholder="Número de documento" required>
+                    <button type="button" id="btnBuscarDni" class="btn-search">Buscar</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="nombreCompleto">Nombres</label>
+                    <input type="text" id="nombreCompleto" th:field="*{nombreCompleto}" placeholder="Tus nombres"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="primerApellido">Primer Apellido</label>
+                    <input type="text" id="primerApellido" th:field="*{primerApellido}" placeholder="Apellido paterno"
+                        required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="segundoApellido">Segundo Apellido</label>
+                <input type="text" id="segundoApellido" th:field="*{segundoApellido}"
+                    placeholder="Apellido materno (opcional)">
+            </div>
+
+            <div class="form-group">
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" id="correo" th:field="*{correo}" placeholder="tu@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input type="tel" id="telefono" th:field="*{telefono}" placeholder="Número de teléfono" required>
+            </div>
+
+            <div class="form-group">
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" th:field="*{contrasena}" placeholder="Crea una contraseña segura"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="direccionInput">Dirección</label>
+                <input type="text" id="direccionInput" th:field="*{direccion}" placeholder="Tu dirección completa"
+                    required>
+            </div>
+
+            <button type="submit" class="btn-submit">Crear Cuenta</button>
+        </form>
 
         <div class="form-footer">
             <p>¿Ya tienes una cuenta? <a th:href="@{/}">Iniciar Sesión</a></p>
         </div>
     </div>
+
+    <script>
+        document.getElementById('btnBuscarDni').addEventListener('click', function () {
+            const dni = document.getElementById('dniInput').value;
+
+            console.log('Iniciando búsqueda de DNI:', dni);
+
+            if (!dni || dni.trim() === '') {
+                alert('Por favor, ingresa un DNI válido');
+                return;
+            }
+
+            const btn = this;
+            btn.disabled = true;
+            btn.classList.add('loading');
+            btn.textContent = 'Buscando';
+
+            const apiUrl = '/api/dni/' + dni;
+            console.log('Llamando a API:', apiUrl);
+
+            fetch(apiUrl)
+                .then(response => {
+                    console.log('Respuesta recibida - Status:', response.status);
+                    return response.json().then(data => {
+                        console.log('Datos recibidos:', data);
+                        if (!response.ok) {
+                            const errorMsg = data.message || data.error || 'DNI no encontrado';
+                            throw new Error(errorMsg);
+                        }
+                        return data;
+                    });
+                })
+                .then(data => {
+                    const apiData = data.data || data;
+                    const nombre = apiData.nombres || data.first_name || data.nombres || '';
+                    const primerApellido = apiData.apellido_paterno || data.first_last_name || data.apellidoPaterno || '';
+                    const segundoApellido = apiData.apellido_materno || data.second_last_name || data.apellidoMaterno || '';
+                    const direccion = apiData.direccion_completa || apiData.direccion || data.direccion || '';
+
+                    console.log('Datos parseados:', { nombre, primerApellido, segundoApellido, direccion });
+
+                    if (nombre || primerApellido) {
+                        document.getElementById('nombreCompleto').value = nombre;
+                        document.getElementById('primerApellido').value = primerApellido;
+                        document.getElementById('segundoApellido').value = segundoApellido;
+
+                        if (direccion && direccion.trim() !== '') {
+                            document.getElementById('direccionInput').value = direccion;
+                            console.log('Dirección autocompletada:', direccion);
+                        }
+
+                        btn.textContent = '✓ OK';
+                        btn.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
+
+                        setTimeout(() => {
+                            alert('✓ Datos encontrados y cargados correctamente');
+                        }, 300);
+                    } else {
+                        console.warn('Respuesta sin datos válidos:', data);
+                        alert('⚠ No se encontraron datos para este DNI');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error completo:', error);
+                    let errorMessage = 'Error al buscar el DNI';
+
+                    if (error.message.includes('no encontrado') || error.message.includes('not found')) {
+                        errorMessage = '❌ DNI no encontrado en la base de datos de RENIEC.\n\nPosibles causas:\n• El DNI no existe\n• El servicio de API no está disponible\n• El token de autenticación es inválido';
+                    } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                        errorMessage = '❌ Error de conexión.\n\nNo se pudo conectar con el servidor. Verifica tu conexión a internet.';
+                    } else {
+                        errorMessage = '❌ ' + error.message;
+                    }
+
+                    alert(errorMessage);
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.classList.remove('loading');
+                        btn.textContent = 'Buscar';
+                        btn.style.background = '';
+                    }, 1500);
+                    console.log('Búsqueda de DNI finalizada');
+                });
+        });
+    </script>
 
 </body>
 

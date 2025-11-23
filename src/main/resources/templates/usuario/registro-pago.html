@@ -5,48 +5,196 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Paso 2: Pago</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
-    <link rel="stylesheet" th:href="@{/css/login.css}">
-
     <style>
-        /* CSS adicional específico para los campos de tarjeta */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .payment-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+            padding: 40px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
         .card-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-bottom: 20px;
         }
 
-        .card-details input {
-            /* Asegura que los campos cortos ocupen un tercio */
+        button[type="submit"] {
             width: 100%;
-            margin-bottom: 0;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .form-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .form-footer a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .security-note {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .security-note i {
+            color: #667eea;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .payment-container {
+                padding: 30px 20px;
+            }
+
+            .card-details {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
-<body class="login-body">
+<body>
 
-    <header class="login-header">
-        <a th:href="@{/registro}" class="btn-morado">Registrar</a>
-        <a th:href="@{/}" class="btn-morado" style="margin-left: 10px;">Iniciar Sesión</a>
-    </header>
+    <div class="payment-container">
+        <h2>Información de Pago</h2>
+        <p class="subtitle">Paso 2 de 2 - Completa tu registro</p>
 
-    <div class="login-container">
-        <h2>Registra la forma de pago</h2>
+        <div class="security-note">
+            🔒 Tus datos están protegidos y encriptados
+        </div>
 
         <form th:action="@{/registro-finalizar}" method="post" th:object="${usuario}">
-            <input type="text" th:field="*{numeroTarjeta}" placeholder="Número de tarjeta" required>
-            <div class="card-details">
-                <input type="text" th:field="*{fechaExpiracion}" placeholder="MM/AA" required>
-                <input type="text" th:field="*{cvv}" placeholder="CVV*" required>
+            <div class="form-group">
+                <label for="numeroTarjeta">Número de Tarjeta</label>
+                <input type="text" id="numeroTarjeta" th:field="*{numeroTarjeta}" placeholder="1234 5678 9012 3456"
+                    maxlength="19" required>
             </div>
-            <button type="submit" class="btn-morado">Registrar</button>
+
+            <div class="card-details">
+                <div class="form-group">
+                    <label for="fechaExpiracion">Fecha de Expiración</label>
+                    <input type="text" id="fechaExpiracion" th:field="*{fechaExpiracion}" placeholder="MM/AA"
+                        maxlength="5" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" th:field="*{cvv}" placeholder="123" maxlength="4" required>
+                </div>
+            </div>
+
+            <button type="submit">Completar Registro</button>
         </form>
 
-
         <div class="form-footer">
-            <a th:href="@{/registro}" class="btn-link" style="text-align: left;">← Atrás</a>
+            <a th:href="@{/registro}">← Volver al paso anterior</a>
         </div>
     </div>
 
