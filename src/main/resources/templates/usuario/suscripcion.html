@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="eS" xmlns="thymeleaf">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/css/suscripcion.css}">
+    <link rel="stylesheet" href="../../static/css/suscripcion.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+
+<body>
+    <section class="pricing-container">
+        <button class="btn-back" onclick="history.back()">
+            <i class="fa-solid fa-arrow-left"></i> Volver
+        </button>
+
+        <h1>ELIGE TU PLAN</h1>
+
+        <div class="pricing-cards">
+            <div class="card card-blue">
+                <div class="header header-title">PRUEBA GRATUITA</div>
+                <div class="price">S/. 0.00</div>
+                <div class="features">
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            Acceso a la Colección Estándar por <span class="resaltar">5 Días</span>
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-xmark"></i>
+                        <span class="feature-text">
+                            Libros y Contenido Exclusivo <span class="resaltar">No Incluido</span>
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            Lectura en 1 Dispositivo
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            Búsqueda y Lectura Rápida
+                        </span>
+                    </p>
+                </div>
+                <a th:href="@{/}" class="btn btn-white">COMIENZA AHORA</a>
+            </div>
+
+            <div class="card card-mint">
+                <div class="header header-title">PLAN MENSUAL</div>
+                <div class="price">S/. 25.00</div>
+                <div class="features">
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            <span class="resaltar">Acceso Total</span> a todo el Catálogo
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            <span class="resaltar">1 Mes</span> de Lectura Ilimitada
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            Lectura Sin Conexión (Modo Offline)
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            Soporte Técnico por Correo Electrónico
+                        </span>
+                    </p>
+                </div>
+                <a th:href="@{/registro-pago(plan='mensual')}" class="btn btn-white">COMPRAR AHORA</a>
+            </div>
+
+            <div class="card card-pink">
+                <div class="header header-title">PLAN ANUAL</div>
+                <div class="price">S/. 250.00</div>
+                <div class="features">
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            <span class="resaltar">Ahorro de S/. 50.00</span> (Pago Anual)
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            <span class="resaltar">Acceso Total</span> al Catálogo + contenidos <span
+                                class="resaltar">Exclusivos</span>
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            Lectura en <span class="resaltar">Múltiples Dispositivos</span>
+                        </span>
+                    </p>
+                    <p>
+                        <i class="fa-solid fa-check"></i>
+                        <span class="feature-text">
+                            Acceso Prioritario a Nuevos Lanzamientos
+                        </span>
+                    </p>
+                </div>
+                <a th:href="@{/registro-pago(plan='anual')}" class="btn btn-white">AHORRA AHORA</a>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

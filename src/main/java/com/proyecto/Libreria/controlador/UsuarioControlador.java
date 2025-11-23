@@ -55,9 +55,31 @@ public class UsuarioControlador {
     public String procesarRegistroPaso1(@ModelAttribute("usuario") Usuario usuario, Model model, HttpSession session) {
         // Guardar temporalmente en sesión
         session.setAttribute("usuarioTemporal", usuario);
-        model.addAttribute("usuario", usuario);
+        return "usuario/suscripcion"; 
+    }
+
+
+    // PÁGINA DE SELECCIÓN DE PLANES
+    @GetMapping("/suscripcion")
+    public String mostrarPlanesSuscripcion() {
+        return "usuario/suscripcion"; 
+    }
+
+    // REGISTRO - PASO 2 (Muestra el formulario de pago con el plan seleccionado)
+    @GetMapping("/registro-pago")
+    public String mostrarRegistroPaso2(@RequestParam String plan, Model model, HttpSession session, RedirectAttributes redirect) {
+        Usuario usuarioTemporal = (Usuario) session.getAttribute("usuarioTemporal");
+        
+        if (usuarioTemporal == null) {
+            redirect.addFlashAttribute("error", "Por favor, complete primero sus datos personales.");
+            return "redirect:/registro"; 
+        }
+        
+        model.addAttribute("planSeleccionado", plan);
+        model.addAttribute("usuario", new Usuario()); // Objeto para el formulario de pago
         return "usuario/registro-pago"; 
     }
+
 
     // recibe datos de pago y finaliza el registro
     @PostMapping("/registro-finalizar")
