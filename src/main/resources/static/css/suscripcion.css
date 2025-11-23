@@ -1,0 +1,237 @@
+/*
+  =====================================
+  ESTILOS GLOBALES Y CONTENEDOR PRINCIPAL
+  =====================================
+*/
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+.pricing-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+}
+
+h1 {
+    font-size: 2.5em;
+    font-weight: 800;
+    margin-bottom: 70px;
+}
+
+/*
+  =====================================
+  CONTENEDOR DE TARJETAS (FLEXBOX)
+  =====================================
+*/
+.pricing-cards {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/*
+  =====================================
+  ESTILOS COMUNES DE LAS TARJETAS
+  =====================================
+*/
+.btn-back {
+    position: absolute;
+    top: -40px; 
+    left: 0;
+
+    background-color: #ffffff; 
+    color: #333333; 
+    border: 2px solid #dddddd; 
+    padding: 8px 18px; 
+    border-radius: 50px; 
+    font-size: 0.9em;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+
+    transition: all 0.3s ease;
+}
+
+.btn-back i {
+    margin-right: 8px;
+    font-size: 1em;
+}
+
+.btn-back:hover {
+    background-color: #f0f0f0; 
+    color: #000000;
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btn-back:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #e8e8e8;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 300px;
+    /* Ancho base de cada tarjeta */
+    background-color: #fff;
+    color: #333;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    padding-bottom: 20px;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4); 
+    z-index: 10; 
+}
+
+/* Sección de Encabezado que sobresale */
+.header {
+    background-color: #fff;
+    color: #333;
+    padding: 20px;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin: 0 20px;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: -20px;
+    z-index: 2;
+}
+
+/* Precio */
+.price {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #ffffff;
+    margin-top: -30px;
+    padding: 20px 0;
+}
+
+/* Características */
+.features {
+    padding: 20px;
+    color: #fffefd;
+    ;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.8;
+    margin-bottom: 40px;
+}
+
+.features p {
+    display: flex;
+    align-items: flex-start;
+    margin: 8px 0;
+    font-size: 0.95em;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+}
+
+.features p .resaltar {
+    font-weight: 900;
+    color: #534949;
+}
+
+.features p i {
+    flex-shrink: 0;
+    margin-right: 10px;
+    line-height: 1.2
+}
+
+.features p .feature-text {
+    flex-grow: 1;
+    line-height: 1.2
+}
+
+/* Botón Comprar */
+.btn-white {
+    text-decoration: none;
+    display: block;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    background-color: #ffffff;
+    color: #333;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: 3px solid #f9f9f9; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); 
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-white:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3); 
+    transform: translateY(-2px); 
+    background-color: #f0f0f0; 
+}
+
+.btn-white:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); 
+    background-color: #e0e0e0; 
+}
+
+/*
+  =====================================
+  ESTILOS ESPECÍFICOS DE COLOR
+  =====================================
+*/
+.card-blue {
+    background-color: #38c659;
+}
+
+.card-mint {
+    background-color: #d9d13c;
+}
+
+.card-pink {
+    background-color: #e8ac5d;
+}
+
+.header-title {
+    color: #171615;
+    font-weight: 900;
+}
+
+/* Ajustes para Responsividad */
+@media (max-width: 960px) {
+    .pricing-cards {
+        flex-direction: column;
+        /* Apila las tarjetas en pantallas pequeñas */
+        align-items: center;
+    }
+
+    .card {
+        max-width: 400px;
+        flex-basis: auto;
+    }
+}
