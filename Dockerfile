@@ -2,9 +2,12 @@
 # FASE 1: CONSTRUCCIÓN (BUILD PHASE)
 # Usa Maven y JDK 21 para compilar tu código y generar el JAR.
 # ----------------------------------------------------
+# FASE 1: CONSTRUCCIÓN (BUILD PHASE)
+# Usa la imagen de Maven con soporte para Java 21 para compilar.
+# ----------------------------------------------------
 FROM maven:3.9.5-amazoncorretto-21 AS build
 WORKDIR /app
-# Copia los archivos de configuración y el código fuente
+# Copia archivos de Maven y código fuente
 COPY pom.xml .
 COPY src /app/src
 # Compila el proyecto Spring Boot y omite las pruebas
@@ -12,9 +15,10 @@ RUN mvn clean package -DskipTests
 
 # ----------------------------------------------------
 # FASE 2: EJECUCIÓN (RUN PHASE)
-# Usa una imagen ligera (solo JRE 21) para ejecutar la aplicación final.
+# ¡CORRECCIÓN CLAVE AQUÍ! Usamos 'openjdk:21-slim'
+# que es la imagen ligera y válida de Java 21.
 # ----------------------------------------------------
-FROM openjdk:21-jdk-slim
+FROM openjdk:21-slim 
 WORKDIR /app
 # Expone el puerto por defecto de Spring Boot
 EXPOSE 8080
