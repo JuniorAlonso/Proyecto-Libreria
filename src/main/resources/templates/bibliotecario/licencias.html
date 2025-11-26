@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Licencias Activas</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #555;
+        }
+
+        .status-active {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a th:href="@{/dashboardBibliotecario}" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Volver al
+            Dashboard</a>
+        <h2>Licencias Activas (Lectura en Curso)</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Libro</th>
+                    <th>Fecha Préstamo</th>
+                    <th>Vence</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="prestamo : ${prestamos}">
+                    <td th:text="${prestamo.usuario.nombreCompleto}">Usuario</td>
+                    <td th:text="${prestamo.libro.titulo}">Libro</td>
+                    <td th:text="${prestamo.fechaPrestamo}">2023-01-01</td>
+                    <td th:text="${prestamo.fechaDevolucion}">2023-01-15</td>
+                    <td><span class="status-active">ACTIVO</span></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(prestamos)}">
+                    <td colspan="5" style="text-align: center; color: #777;">No hay licencias activas en este momento.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

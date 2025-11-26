@@ -4,27 +4,29 @@ import com.proyecto.Libreria.entidad.Libro;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import com.proyecto.Libreria.repositorio.LibroRepositorio;
+import com.proyecto.Libreria.repositorio.UsuarioRepositorio;
 
 @Component
 public class InicializadorDatos implements CommandLineRunner {
 
     private final LibroRepositorio libroRepository;
+    private final UsuarioRepositorio usuarioRepository;
 
-    public InicializadorDatos(LibroRepositorio libroRepository) {
+    public InicializadorDatos(LibroRepositorio libroRepository, UsuarioRepositorio usuarioRepository) {
         this.libroRepository = libroRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        // 1. Inicializar Libros
         if (libroRepository.count() == 0) {
             System.out.println("--- Inicializando datos de libros ---");
-
-            // Los libros se insertarán 
 
             Libro l1 = new Libro();
             l1.setTitulo("Cien años de soledad");
             l1.setAutor("Gabriel García Márquez");
-            l1.setStock(5); // Stock es clave
+            l1.setStock(5);
             libroRepository.save(l1);
 
             Libro l2 = new Libro();
@@ -40,6 +42,18 @@ public class InicializadorDatos implements CommandLineRunner {
             libroRepository.save(l3);
 
             System.out.println(" Libros iniciales cargados: " + libroRepository.count());
+        }
+
+        // 2. Inicializar Usuario Bibliotecario
+        if (usuarioRepository.findByCorreo("bibliotecario@library.com").isEmpty()) {
+            System.out.println("--- Inicializando usuario Bibliotecario ---");
+            com.proyecto.Libreria.entidad.Usuario admin = new com.proyecto.Libreria.entidad.Usuario();
+            admin.setNombreCompleto("Bibliotecario Principal");
+            admin.setCorreo("bibliotecario@library.com");
+            admin.setContrasena("admin123");
+            admin.setRol("BIBLIOTECARIO");
+            usuarioRepository.save(admin);
+            System.out.println("Usuario bibliotecario creado: bibliotecario@library.com / admin123");
         }
     }
 }

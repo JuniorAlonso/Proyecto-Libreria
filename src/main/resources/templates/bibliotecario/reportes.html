@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reportes</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #ffc107;
+            padding-bottom: 0.5rem;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #007bff;
+        }
+
+        .stat-title {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a th:href="@{/dashboardBibliotecario}" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Volver al
+            Dashboard</a>
+        <h2>Reportes de Uso</h2>
+
+        <div class="stat-card">
+            <div class="stat-title">Libros Más Leídos (Simulado)</div>
+            <ul>
+                <li th:each="libro : ${librosMasLeidos}" th:text="${libro.titulo}">Libro</li>
+            </ul>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Total de Préstamos Activos</div>
+            <div class="stat-value">Calculando...</div>
+        </div>
+    </div>
+</body>
+
+</html>
