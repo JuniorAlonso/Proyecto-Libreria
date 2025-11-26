@@ -16,7 +16,9 @@ public class Libro {
     private String autor;
     private String isbn;
     private int stock;
-    private String imagenUrl; // URL o nombre de la imagen 
+    private String imagenUrl; // URL o nombre de la imagen
+    private String archivoUrl; // URL del archivo digital (PDF/EPUB)
+    private String formato; // PDF, EPUB, etc.
 
     public Libro() {
     }
@@ -76,5 +78,21 @@ public class Libro {
 
     public void setImagenUrl(String imagenUrl) {
         this.imagenUrl = imagenUrl;
+    }
+
+    public String getArchivoUrl() {
+        return archivoUrl;
+    }
+
+    public void setArchivoUrl(String archivoUrl) {
+        this.archivoUrl = archivoUrl;
+    }
+
+    public String getFormato() {
+        return formato;
+    }
+
+    public void setFormato(String formato) {
+        this.formato = formato;
     }
 }

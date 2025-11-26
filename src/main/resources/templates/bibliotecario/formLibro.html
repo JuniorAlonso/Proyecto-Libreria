@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Libro</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 1rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-save:hover {
+            background-color: #218838;
+        }
+
+        .btn-cancel {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 th:text="${libro.id != null ? 'Editar Libro' : 'Nuevo Libro'}">Libro</h2>
+        <form th:action="@{/libro/guardar}" th:object="${libro}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-group">
+                <label>Título</label>
+                <input type="text" th:field="*{titulo}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Autor</label>
+                <input type="text" th:field="*{autor}" required>
+            </div>
+
+            <div class="form-group">
+                <label>ISBN</label>
+                <input type="text" th:field="*{isbn}">
+            </div>
+
+            <div class="form-group">
+                <label>Stock Físico</label>
+                <input type="number" th:field="*{stock}" min="0">
+            </div>
+
+            <div class="form-group">
+                <label>URL Imagen Portada</label>
+                <input type="text" th:field="*{imagenUrl}" placeholder="https://ejemplo.com/imagen.jpg">
+            </div>
+
+            <div class="form-group">
+                <label>URL Archivo Digital (PDF/EPUB)</label>
+                <input type="text" th:field="*{archivoUrl}" placeholder="https://ejemplo.com/libro.pdf">
+            </div>
+
+            <div class="form-group">
+                <label>Formato Digital</label>
+                <select th:field="*{formato}">
+                    <option value="">-- Seleccionar --</option>
+                    <option value="PDF">PDF</option>
+                    <option value="EPUB">EPUB</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-save">Guardar Libro</button>
+            <a th:href="@{/dashboardBibliotecario}" class="btn-cancel">Cancelar</a>
+        </form>
+    </div>
+</body>
+
+</html>

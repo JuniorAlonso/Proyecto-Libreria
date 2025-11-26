@@ -18,7 +18,7 @@ public class UsuarioControlador {
         this.usuarioService = usuarioService;
     }
 
-    // LOGIN 
+    // LOGIN
     @GetMapping("/")
     public String mostrarLogin(Model model) {
         return "usuario/index";
@@ -34,15 +34,21 @@ public class UsuarioControlador {
 
         var usuario = usuarioService.iniciarSesion(correo, contrasena);
         if (usuario.isPresent()) {
-            session.setAttribute("usuario", usuario.get());
-            return "redirect:/usuario/inicio";
+            Usuario u = usuario.get();
+            session.setAttribute("usuario", u);
+
+            if ("BIBLIOTECARIO".equalsIgnoreCase(u.getRol()) || "ADMIN".equalsIgnoreCase(u.getRol())) {
+                return "redirect:/dashboardBibliotecario";
+            } else {
+                return "redirect:/usuario/inicio";
+            }
         } else {
             redirect.addFlashAttribute("error", "Correo o contraseña incorrectos");
             return "redirect:/";
         }
     }
 
-    // REGISTRO 
+    // REGISTRO
     // formulario
     @GetMapping("/registro")
     public String mostrarRegistroPaso1(Model model) {
@@ -55,50 +61,50 @@ public class UsuarioControlador {
     public String procesarRegistroPaso1(@ModelAttribute("usuario") Usuario usuario, Model model, HttpSession session) {
         // Guardar temporalmente en sesión
         session.setAttribute("usuarioTemporal", usuario);
-        return "usuario/suscripcion"; 
+        return "usuario/suscripcion";
     }
-
 
     // PÁGINA DE SELECCIÓN DE PLANES
     @GetMapping("/suscripcion")
     public String mostrarPlanesSuscripcion() {
-        return "usuario/suscripcion"; 
+        return "usuario/suscripcion";
     }
 
     // REGISTRO - PASO 2 (Muestra el formulario de pago con el plan seleccionado)
     @GetMapping("/registro-pago")
-    public String mostrarRegistroPaso2(@RequestParam String plan, Model model, HttpSession session, RedirectAttributes redirect) {
+    public String mostrarRegistroPaso2(@RequestParam String plan, Model model, HttpSession session,
+            RedirectAttributes redirect) {
         Usuario usuarioTemporal = (Usuario) session.getAttribute("usuarioTemporal");
-        
+
         if (usuarioTemporal == null) {
             redirect.addFlashAttribute("error", "Por favor, complete primero sus datos personales.");
-            return "redirect:/registro"; 
+            return "redirect:/registro";
         }
-        
+
         model.addAttribute("planSeleccionado", plan);
         model.addAttribute("usuario", new Usuario()); // Objeto para el formulario de pago
-        return "usuario/registro-pago"; 
+        return "usuario/registro-pago";
     }
-
 
     // recibe datos de pago y finaliza el registro
     @PostMapping("/registro-finalizar")
-    public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario, HttpSession session, RedirectAttributes redirect) {
+    public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario, HttpSession session,
+            RedirectAttributes redirect) {
         // Recuperar datos del primer paso
         Usuario usuarioTemporal = (Usuario) session.getAttribute("usuarioTemporal");
-        
+
         if (usuarioTemporal != null) {
             // Combinar datos
             usuarioTemporal.setNumeroTarjeta(usuario.getNumeroTarjeta());
             usuarioTemporal.setFechaExpiracion(usuario.getFechaExpiracion());
             usuarioTemporal.setCvv(usuario.getCvv());
-            
+
             // Registrar usuario
             usuarioService.registrar(usuarioTemporal);
-            
+
             // Limpiar sesión
             session.removeAttribute("usuarioTemporal");
-            
+
             redirect.addFlashAttribute("success", "Registro exitoso. Ahora puedes iniciar sesión.");
         }
 
@@ -110,7 +116,7 @@ public class UsuarioControlador {
     public String mostrarDashboardInicio(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null || usuario.getId() == null) {
-            return "redirect:/"; 
+            return "redirect:/";
         }
         model.addAttribute("usuario", usuario);
         return "usuario/inicio";
@@ -126,7 +132,7 @@ public class UsuarioControlador {
     public String mostrarPerfil(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario == null || usuario.getId() == null) {
-            return "redirect:/"; 
+            return "redirect:/";
         }
         model.addAttribute("usuario", usuario);
         return "usuario/perfil";
