@@ -15,17 +15,17 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre") 
-    private String nombreCompleto; 
+    @Column(name = "nombre")
+    private String nombreCompleto;
 
-    @Column(name = "apellido") 
-    private String primerApellido; 
-    
+    @Column(name = "apellido")
+    private String primerApellido;
+
     @Column(name = "correo")
-    private String correo; 
+    private String correo;
 
-    @Column(name = "contrasena") 
-    private String contrasena; 
+    @Column(name = "contrasena")
+    private String contrasena;
 
     // Mapeo de Registro y Registro Pago
     private String nombreUsuario;
@@ -33,18 +33,19 @@ public class Usuario {
     private String telefono;
     private String segundoApellido;
     private String direccion;
-    
+
     private String numeroTarjeta;
     private String fechaExpiracion;
     private String cvv;
-    
+
     @Column(name = "rol")
     private String rol; // "ADMIN" o "USUARIO"
 
-    // CONSTRUCTORES 
+    // CONSTRUCTORES
 
     // Constructor vacío
-    public Usuario() {}
+    public Usuario() {
+    }
 
     public Usuario(String nombreCompleto, String primerApellido, String correo, String contrasena) {
         this.nombreCompleto = nombreCompleto;
@@ -54,48 +55,118 @@ public class Usuario {
     }
 
     // GETTERS Y SETTERS
-    
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
-    public String getNombreCompleto() { return nombreCompleto; }
-    public void setNombreCompleto(String nombreCompleto) { this.nombreCompleto = nombreCompleto; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getPrimerApellido() { return primerApellido; }
-    public void setPrimerApellido(String primerApellido) { this.primerApellido = primerApellido; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
 
-    public String getContrasena() { return contrasena; }
-    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
 
-    public String getNombreUsuario() { return nombreUsuario; }
-    public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
+    public String getPrimerApellido() {
+        return primerApellido;
+    }
 
-    public String getDui() { return dui; }
-    public void setDui(String dui) { this.dui = dui; }
+    public void setPrimerApellido(String primerApellido) {
+        this.primerApellido = primerApellido;
+    }
 
-    public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public String getCorreo() {
+        return correo;
+    }
 
-    public String getSegundoApellido() { return segundoApellido; }
-    public void setSegundoApellido(String segundoApellido) { this.segundoApellido = segundoApellido; }
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
 
-    public String getDireccion() { return direccion; }
-    public void setDireccion(String direccion) { this.direccion = direccion; }
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getDui() {
+        return dui;
+    }
+
+    public void setDui(String dui) {
+        this.dui = dui;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getSegundoApellido() {
+        return segundoApellido;
+    }
+
+    public void setSegundoApellido(String segundoApellido) {
+        this.segundoApellido = segundoApellido;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
 
     // Campos de Pago
-    public String getNumeroTarjeta() { return numeroTarjeta; }
-    public void setNumeroTarjeta(String numeroTarjeta) { this.numeroTarjeta = numeroTarjeta; }
+    public String getNumeroTarjeta() {
+        return numeroTarjeta;
+    }
 
-    public String getFechaExpiracion() { return fechaExpiracion; }
-    public void setFechaExpiracion(String fechaExpiracion) { this.fechaExpiracion = fechaExpiracion; }
+    public void setNumeroTarjeta(String numeroTarjeta) {
+        this.numeroTarjeta = numeroTarjeta;
+    }
 
-    public String getCvv() { return cvv; }
-    public void setCvv(String cvv) { this.cvv = cvv; }
+    public String getFechaExpiracion() {
+        return fechaExpiracion;
+    }
 
-    public String getRol() { return rol; }
-    public void setRol(String rol) { this.rol = rol; }
+    public void setFechaExpiracion(String fechaExpiracion) {
+        this.fechaExpiracion = fechaExpiracion;
+    }
+
+    public String getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
 
 }
