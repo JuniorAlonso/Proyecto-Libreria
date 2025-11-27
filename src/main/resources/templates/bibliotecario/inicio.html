@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio Bibliotecario</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-manage {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-manage:hover {
+            background-color: #0056b3;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 2rem;
+        }
+
+        .btn-logout {
+            color: #dc3545;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-actions">
+            <a th:href="@{/logout}" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a>
+        </div>
+
+        <h1>¡Bienvenido Bibliotecario!</h1>
+        <p>Hola <span th:text="${usuario.nombreCompleto}">Bibliotecario</span>, nos alegra verte de nuevo en la
+            plataforma de la
+            Library! Nos hará de alegría ayudarte nuevamente por acá.</p>
+
+        <p>Desde aquí puedes acceder a la gestión completa del catálogo de libros.</p>
+
+        <a th:href="@{/bibliotecario/gestion-libros}" class="btn-manage">
+            <i class="fa-solid fa-book"></i> Gestionar Libros
+        </a>
+    </div>
+</body>
+
+</html>

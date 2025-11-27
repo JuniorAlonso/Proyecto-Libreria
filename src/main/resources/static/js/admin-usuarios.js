@@ -18,10 +18,10 @@ async function cargarUsuarios() {
     try {
         const response = await fetch('/api/usuarios');
         const usuarios = await response.json();
-        
+
         const tbody = document.querySelector('#usuariosTable tbody');
         tbody.innerHTML = '';
-        
+
         usuarios.forEach(usuario => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -30,8 +30,8 @@ async function cargarUsuarios() {
                 <td>${usuario.correo}</td>
                 <td>${usuario.telefono || 'N/A'}</td>
                 <td>
-                    <span class="badge-rol ${usuario.rol === 'ADMIN' || usuario.rol === 'admin' ? 'admin' : 'usuario'}">
-                        ${usuario.rol === 'ADMIN' || usuario.rol === 'admin' ? '👑 Admin' : '👤 Usuario'}
+                    <span class="badge-rol ${getBadgeClass(usuario.rol)}">
+                        ${getBadgeText(usuario.rol)}
                     </span>
                 </td>
                 <td>
@@ -54,16 +54,16 @@ async function editUsuario(id) {
     try {
         const response = await fetch(`/api/usuarios/${id}`);
         const usuario = await response.json();
-        
+
         usuarioEditandoId = id;
         document.getElementById('usuarioModal').classList.add('active');
         document.getElementById('modalTitle').textContent = 'Editar Usuario';
-        
+
         document.getElementById('nombre').value = usuario.nombreCompleto || '';
         document.getElementById('correo').value = usuario.correo || '';
         document.getElementById('telefono').value = usuario.telefono || '';
         document.getElementById('rol').value = usuario.rol || 'USUARIO';
-        
+
         // Ocultar campo de contraseña en edición
         document.getElementById('contrasenaGroup').style.display = 'none';
     } catch (error) {
@@ -78,7 +78,7 @@ async function deleteUsuario(id) {
             const response = await fetch(`/api/usuarios/${id}`, {
                 method: 'DELETE'
             });
-            
+
             if (response.ok) {
                 alert('Usuario eliminado exitosamente');
                 cargarUsuarios();
@@ -93,26 +93,26 @@ async function deleteUsuario(id) {
     }
 }
 
-document.getElementById('usuarioForm').addEventListener('submit', async function(e) {
+document.getElementById('usuarioForm').addEventListener('submit', async function (e) {
     e.preventDefault();
-    
+
     const usuario = {
         nombreCompleto: document.getElementById('nombre').value,
         correo: document.getElementById('correo').value,
         rol: document.getElementById('rol').value,
         telefono: document.getElementById('telefono').value
     };
-    
+
     // Solo incluir contraseña si no está vacía
     const contrasena = document.getElementById('contrasena').value;
     if (contrasena) {
         usuario.contrasena = contrasena;
     }
-    
+
     try {
         const url = usuarioEditandoId ? `/api/usuarios/${usuarioEditandoId}` : '/api/usuarios';
         const method = usuarioEditandoId ? 'PUT' : 'POST';
-        
+
         const response = await fetch(url, {
             method: method,
             headers: {
@@ -120,7 +120,7 @@ document.getElementById('usuarioForm').addEventListener('submit', async function
             },
             body: JSON.stringify(usuario)
         });
-        
+
         if (response.ok) {
             alert('Usuario guardado exitosamente');
             closeModal();
@@ -134,7 +134,7 @@ document.getElementById('usuarioForm').addEventListener('submit', async function
     }
 });
 
-document.getElementById('usuarioModal').addEventListener('click', function(e) {
+document.getElementById('usuarioModal').addEventListener('click', function (e) {
     if (e.target === this) {
         closeModal();
     }
@@ -142,3 +142,19 @@ document.getElementById('usuarioModal').addEventListener('click', function(e) {
 
 // Cargar usuarios al iniciar la página
 document.addEventListener('DOMContentLoaded', cargarUsuarios);
+
+function getBadgeClass(rol) {
+    if (!rol) return 'usuario';
+    const r = rol.toUpperCase();
+    if (r === 'ADMIN') return 'admin';
+    if (r === 'BIBLIOTECARIO') return 'bibliotecario';
+    return 'usuario';
+}
+
+function getBadgeText(rol) {
+    if (!rol) return '👤 Usuario';
+    const r = rol.toUpperCase();
+    if (r === 'ADMIN') return '👑 Admin';
+    if (r === 'BIBLIOTECARIO') return '📚 Bibliotecario';
+    return '👤 Usuario';
+}

@@ -304,3 +304,8 @@
     background: #e9ecef;
     color: #495057;
 }
+
+.badge-rol.bibliotecario {
+    background: linear-gradient(135deg, #20bf55 0%, #01baef 100%);
+    color: white;
+}

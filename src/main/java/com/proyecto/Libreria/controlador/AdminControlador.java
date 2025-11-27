@@ -24,28 +24,28 @@ public class AdminControlador {
     @GetMapping("/dashboard")
     public String mostrarDashboard(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null || usuario.getId() == null || 
-            !("ADMIN".equalsIgnoreCase(usuario.getRol()))) {
+        if (usuario == null || usuario.getId() == null ||
+                !("ADMIN".equalsIgnoreCase(usuario.getRol()))) {
             return "redirect:/usuario/inicio";
         }
-        
+
         // Obtener estadísticas desde la base de datos
         Map<String, Long> estadisticas = dashboardService.obtenerEstadisticas();
-        
+
         model.addAttribute("usuario", usuario);
         model.addAttribute("totalLibros", estadisticas.get("totalLibros"));
         model.addAttribute("totalUsuarios", estadisticas.get("totalUsuarios"));
         model.addAttribute("prestamosActivos", estadisticas.get("prestamosActivos"));
         model.addAttribute("prestamosVencidos", estadisticas.get("prestamosVencidos"));
-        
+
         return "admin/dashboard";
     }
 
     @GetMapping("/libros")
     public String mostrarGestionLibros(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null || usuario.getId() == null || 
-            !("ADMIN".equalsIgnoreCase(usuario.getRol()))) {
+        if (usuario == null || usuario.getId() == null ||
+                !("ADMIN".equalsIgnoreCase(usuario.getRol()))) {
             return "redirect:/usuario/inicio";
         }
         model.addAttribute("usuario", usuario);
@@ -55,8 +55,8 @@ public class AdminControlador {
     @GetMapping("/usuarios")
     public String mostrarGestionUsuarios(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null || usuario.getId() == null || 
-            !("ADMIN".equalsIgnoreCase(usuario.getRol()))) {
+        if (usuario == null || usuario.getId() == null ||
+                !("ADMIN".equalsIgnoreCase(usuario.getRol()))) {
             return "redirect:/usuario/inicio";
         }
         model.addAttribute("usuario", usuario);
@@ -69,23 +69,22 @@ public class AdminControlador {
     @GetMapping("/reportes")
     public String mostrarReportes(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null || usuario.getId() == null || 
-            !("ADMIN".equalsIgnoreCase(usuario.getRol()))) {
+        if (usuario == null || usuario.getId() == null ||
+                !("ADMIN".equalsIgnoreCase(usuario.getRol()))) {
             return "redirect:/usuario/inicio";
         }
-        
+
         // Obtener todos los préstamos
         java.util.List<com.proyecto.Libreria.entidad.Prestamo> prestamos = prestamoService.obtenerPrestamosActivos();
-        
+
         // También obtener todos los préstamos (activos y devueltos)
-        java.util.List<com.proyecto.Libreria.entidad.Prestamo> todosPrestamos = 
-            prestamoRepository.findAll();
-        
+        java.util.List<com.proyecto.Libreria.entidad.Prestamo> todosPrestamos = prestamoRepository.findAll();
+
         model.addAttribute("usuario", usuario);
         model.addAttribute("prestamos", todosPrestamos);
         return "admin/reportes";
     }
-    
+
     @Autowired
     private com.proyecto.Libreria.repositorio.PrestamoRepositorio prestamoRepository;
 }

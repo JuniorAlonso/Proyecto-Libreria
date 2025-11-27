@@ -37,7 +37,9 @@ public class UsuarioControlador {
             Usuario u = usuario.get();
             session.setAttribute("usuario", u);
 
-            if ("BIBLIOTECARIO".equalsIgnoreCase(u.getRol()) || "ADMIN".equalsIgnoreCase(u.getRol())) {
+            if ("ADMIN".equalsIgnoreCase(u.getRol())) {
+                return "redirect:/admin/dashboard";
+            } else if ("BIBLIOTECARIO".equalsIgnoreCase(u.getRol())) {
                 return "redirect:/dashboardBibliotecario";
             } else {
                 return "redirect:/usuario/inicio";

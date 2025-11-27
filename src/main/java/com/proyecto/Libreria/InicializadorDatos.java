@@ -43,17 +43,5 @@ public class InicializadorDatos implements CommandLineRunner {
 
             System.out.println(" Libros iniciales cargados: " + libroRepository.count());
         }
-
-        // 2. Inicializar Usuario Bibliotecario
-        if (usuarioRepository.findByCorreo("bibliotecario@library.com").isEmpty()) {
-            System.out.println("--- Inicializando usuario Bibliotecario ---");
-            com.proyecto.Libreria.entidad.Usuario admin = new com.proyecto.Libreria.entidad.Usuario();
-            admin.setNombreCompleto("Bibliotecario Principal");
-            admin.setCorreo("bibliotecario@library.com");
-            admin.setContrasena("admin123");
-            admin.setRol("BIBLIOTECARIO");
-            usuarioRepository.save(admin);
-            System.out.println("Usuario bibliotecario creado: bibliotecario@library.com / admin123");
-        }
     }
 }
