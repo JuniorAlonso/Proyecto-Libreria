@@ -41,17 +41,6 @@ public class AdminControlador {
         return "admin/dashboard";
     }
 
-    @GetMapping("/libros")
-    public String mostrarGestionLibros(HttpSession session, Model model) {
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null || usuario.getId() == null ||
-                !("ADMIN".equalsIgnoreCase(usuario.getRol()))) {
-            return "redirect:/usuario/inicio";
-        }
-        model.addAttribute("usuario", usuario);
-        return "admin/libros";
-    }
-
     @GetMapping("/usuarios")
     public String mostrarGestionUsuarios(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -63,8 +52,22 @@ public class AdminControlador {
         return "admin/usuarios";
     }
 
+    @GetMapping("/logs")
+    public String mostrarLogs(HttpSession session, Model model) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null || usuario.getId() == null ||
+                !("ADMIN".equalsIgnoreCase(usuario.getRol()))) {
+            return "redirect:/usuario/inicio";
+        }
+        model.addAttribute("usuario", usuario);
+        return "admin/logs";
+    }
+
     @Autowired
     private com.proyecto.Libreria.service.PrestamoService prestamoService;
+
+    @Autowired
+    private com.proyecto.Libreria.repositorio.PrestamoRepositorio prestamoRepository;
 
     @GetMapping("/reportes")
     public String mostrarReportes(HttpSession session, Model model) {
@@ -74,17 +77,11 @@ public class AdminControlador {
             return "redirect:/usuario/inicio";
         }
 
-        // Obtener todos los préstamos
-        java.util.List<com.proyecto.Libreria.entidad.Prestamo> prestamos = prestamoService.obtenerPrestamosActivos();
-
-        // También obtener todos los préstamos (activos y devueltos)
+        // Obtener todos los préstamos (activos y devueltos)
         java.util.List<com.proyecto.Libreria.entidad.Prestamo> todosPrestamos = prestamoRepository.findAll();
 
         model.addAttribute("usuario", usuario);
         model.addAttribute("prestamos", todosPrestamos);
         return "admin/reportes";
     }
-
-    @Autowired
-    private com.proyecto.Libreria.repositorio.PrestamoRepositorio prestamoRepository;
 }

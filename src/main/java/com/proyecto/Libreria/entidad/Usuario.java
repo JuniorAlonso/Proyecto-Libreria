@@ -39,7 +39,19 @@ public class Usuario {
     private String cvv;
 
     @Column(name = "rol")
-    private String rol; // "ADMIN" o "USUARIO"
+    private String rol; // "ADMIN", "USUARIO", "BIBLIOTECARIO", "TESORERO"
+
+    @Column(name = "activo")
+    private Boolean activo = true; // Estado de la cuenta
+
+    @Column(name = "fecha_creacion")
+    private java.time.LocalDateTime fechaCreacion;
+
+    @Column(name = "fecha_modificacion")
+    private java.time.LocalDateTime fechaModificacion;
+
+    @Column(name = "modificado_por")
+    private String modificadoPor; // Usuario que realizó la última modificación
 
     // CONSTRUCTORES
 
@@ -167,6 +179,38 @@ public class Usuario {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+    public java.time.LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(java.time.LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public java.time.LocalDateTime getFechaModificacion() {
+        return fechaModificacion;
+    }
+
+    public void setFechaModificacion(java.time.LocalDateTime fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
+
+    public String getModificadoPor() {
+        return modificadoPor;
+    }
+
+    public void setModificadoPor(String modificadoPor) {
+        this.modificadoPor = modificadoPor;
     }
 
 }

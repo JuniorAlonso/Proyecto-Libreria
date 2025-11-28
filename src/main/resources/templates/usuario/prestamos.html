@@ -170,22 +170,34 @@
                 <h2>Mis Préstamos Activos</h2>
             </div>
             
+            <!-- Filtros -->
+            <div th:if="${prestamos != null and !prestamos.isEmpty()}" style="max-width: 1100px; margin: 1rem auto; display: flex; gap: 1rem;">
+                <select id="filtroEstado" onchange="filtrarPrestamos()" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="todos">Todos</option>
+                    <option value="activo" selected>Activos</option>
+                    <option value="vencido">Vencidos</option>
+                </select>
+                <input type="text" id="buscarLibro" onkeyup="filtrarPrestamos()" placeholder="Buscar libro..." style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; flex: 1; max-width: 300px;">
+            </div>
+
             <!-- Si hay préstamos, mostrarlos -->
             <div th:if="${prestamos != null and !prestamos.isEmpty()}" class="table-container" style="max-width: 1100px; margin: 2rem auto;">
-                <table>
+                <table id="tablaPrestamos">
                     <thead>
                         <tr>
                             <th style="width: 30%;">Libro</th>
                             <th style="width: 20%;">Autor</th>
-                            <th style="width: 15%;">Fecha Préstamo</th>
-                            <th style="width: 15%;">Fecha Devolución</th>
+                            <th style="width: 15%;">Fecha Prestamo</th>
+                            <th style="width: 15%;">Fecha Devolucion</th>
                             <th style="width: 20%;">Estado</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="prestamo : ${prestamos}" th:if="${prestamo.estado == 'ACTIVO'}">
+                        <tr th:each="prestamo : ${prestamos}" 
+                            class="fila-prestamo"
+                            th:attr="data-estado=${prestamo.vencido ? 'vencido' : 'activo'}, data-titulo=${prestamo.libro.titulo}, data-autor=${prestamo.libro.autor}">
                             <td>
-                                <strong th:text="${prestamo.libro.titulo}">Título</strong>
+                                <strong th:text="${prestamo.libro.titulo}">Titulo</strong>
                             </td>
                             <td th:text="${prestamo.libro.autor}">Autor</td>
                             <td th:text="${#temporals.format(prestamo.fechaPrestamo, 'dd/MM/yyyy')}">01/01/2024</td>
@@ -203,7 +215,47 @@
                         </tr>
                     </tbody>
                 </table>
+                <div id="sinResultados" style="display: none; text-align: center; padding: 2rem; background: #f8f9fa; border-radius: 8px;">
+                    <p>No se encontraron prestamos.</p>
+                </div>
             </div>
+            
+            <script>
+                function filtrarPrestamos() {
+                    const filtroEstado = document.getElementById('filtroEstado').value;
+                    const buscarTexto = document.getElementById('buscarLibro').value.toLowerCase();
+                    const filas = document.querySelectorAll('.fila-prestamo');
+                    let filasVisibles = 0;
+                    
+                    filas.forEach(fila => {
+                        const estado = fila.getAttribute('data-estado');
+                        const titulo = fila.getAttribute('data-titulo').toLowerCase();
+                        const autor = fila.getAttribute('data-autor').toLowerCase();
+                        
+                        let mostrarPorEstado = filtroEstado === 'todos' || estado === filtroEstado;
+                        let mostrarPorBusqueda = buscarTexto === '' || titulo.includes(buscarTexto) || autor.includes(buscarTexto);
+                        
+                        if (mostrarPorEstado && mostrarPorBusqueda) {
+                            fila.style.display = '';
+                            filasVisibles++;
+                        } else {
+                            fila.style.display = 'none';
+                        }
+                    });
+                    
+                    const sinResultados = document.getElementById('sinResultados');
+                    const tabla = document.getElementById('tablaPrestamos');
+                    if (filasVisibles === 0) {
+                        tabla.style.display = 'none';
+                        sinResultados.style.display = 'block';
+                    } else {
+                        tabla.style.display = 'table';
+                        sinResultados.style.display = 'none';
+                    }
+                }
+                
+                document.addEventListener('DOMContentLoaded', filtrarPrestamos);
+            </script>
             
             <!-- Si no hay préstamos -->
             <div th:if="${prestamos == null or prestamos.isEmpty()}" style="text-align: center; padding: 2rem;">

@@ -18,9 +18,9 @@
         </div>
 
         <div class="right" style="display: flex; align-items: center; gap: 1rem;">
-            <a th:href="@{/usuario/inicio}" class="btn-volver-usuario" title="Volver al área de usuario">
-                <i class="fa-solid fa-arrow-left"></i>
-                <span>Área Usuario</span>
+            <a th:href="@{/usuario/inicio}" class="btn-secondary" style="text-decoration: none; padding: 0.3rem 0.6rem; border-radius: 4px; background-color: #6c757d; color: white; font-size: 0.85rem;">
+                <i class="fa-solid fa-user" style="font-size: 0.8rem;"></i>
+                <span>Menu usuario</span>
             </a>
             <span th:text="${usuario != null ? usuario.nombreCompleto : 'Administrador'}">Administrador</span>
             <a th:href="@{/logout}" style="text-decoration: none;">
@@ -33,14 +33,14 @@
         <a href="#" class="active" title="Dashboard">
             <i class="fa-solid fa-chart-line"></i>
         </a>
-        <a th:href="@{/admin/libros}" title="Gestión de Libros">
-            <i class="fa-solid fa-book"></i>
-        </a>
-        <a th:href="@{/admin/usuarios}" title="Gestión de Usuarios">
+        <a th:href="@{/admin/usuarios}" title="Gestión de Personal">
             <i class="fa-solid fa-users"></i>
         </a>
-        <a th:href="@{/admin/reportes}" title="Reportes">
+        <a th:href="@{/admin/logs}" title="Monitoreo de Logs">
             <i class="fa-solid fa-file-alt"></i>
+        </a>
+        <a th:href="@{/admin/reportes}" title="Reportes Internos">
+            <i class="fa-solid fa-chart-bar"></i>
         </a>
         <a th:href="@{/logout}" title="Cerrar Sesión" style="margin-top: auto; margin-bottom: 1rem;">
             <i class="fa-solid fa-right-from-bracket"></i>
@@ -55,48 +55,36 @@
         <div class="dashboard-grid">
             <div class="stat-card">
                 <div>
-                    <i class="fa-solid fa-book"></i>
-                    <h3 th:text="${totalLibros != null ? totalLibros : 0}">0</h3>
-                    <p>Total de Libros</p>
-                </div>
-                <a th:href="@{/admin/libros}" class="btn-primary">
-                    <i class="fa-solid fa-cog"></i>
-                    <span>Gestionar</span>
-                </a>
-            </div>
-
-            <div class="stat-card">
-                <div>
                     <i class="fa-solid fa-users"></i>
                     <h3 th:text="${totalUsuarios != null ? totalUsuarios : 0}">0</h3>
-                    <p>Usuarios Registrados</p>
+                    <p>Personal Registrado</p>
                 </div>
                 <a th:href="@{/admin/usuarios}" class="btn-primary">
                     <i class="fa-solid fa-cog"></i>
-                    <span>Gestionar</span>
+                    <span>Gestionar Personal</span>
                 </a>
             </div>
 
             <div class="stat-card">
                 <div>
-                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    <i class="fa-solid fa-file-alt"></i>
+                    <h3>Logs</h3>
+                    <p>Auditoria y Seguridad</p>
+                </div>
+                <a th:href="@{/admin/logs}" class="btn-primary">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Ver Logs</span>
+                </a>
+            </div>
+
+            <div class="stat-card">
+                <div>
+                    <i class="fa-solid fa-chart-bar"></i>
                     <h3 th:text="${prestamosActivos != null ? prestamosActivos : 0}">0</h3>
-                    <p>Préstamos Activos</p>
+                    <p>Reportes Internos</p>
                 </div>
                 <a th:href="@{/admin/reportes}" class="btn-primary">
-                    <i class="fa-solid fa-eye"></i>
-                    <span>Ver Reportes</span>
-                </a>
-            </div>
-
-            <div class="stat-card">
-                <div>
-                    <i class="fa-solid fa-clock"></i>
-                    <h3 th:text="${prestamosVencidos != null ? prestamosVencidos : 0}">0</h3>
-                    <p>Préstamos Vencidos</p>
-                </div>
-                <a th:href="@{/admin/reportes}" class="btn-primary">
-                    <i class="fa-solid fa-eye"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
                     <span>Ver Reportes</span>
                 </a>
             </div>

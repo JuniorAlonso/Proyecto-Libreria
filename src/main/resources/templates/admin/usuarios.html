@@ -21,9 +21,9 @@
         </div>
 
         <div class="right" style="display: flex; align-items: center; gap: 1rem;">
-            <a th:href="@{/usuario/inicio}" class="btn-volver-usuario" title="Volver al área de usuario">
-                <i class="fa-solid fa-arrow-left"></i>
-                <span>Área Usuario</span>
+            <a th:href="@{/usuario/inicio}" class="btn-secondary" style="text-decoration: none; padding: 0.3rem 0.6rem; border-radius: 4px; background-color: #6c757d; color: white; font-size: 0.85rem;">
+                <i class="fa-solid fa-user" style="font-size: 0.8rem;"></i>
+                <span>Menu usuario</span>
             </a>
             <span th:text="${usuario != null ? usuario.nombreCompleto : 'Administrador'}">Administrador</span>
             <a th:href="@{/logout}" style="text-decoration: none;">
@@ -36,14 +36,14 @@
         <a th:href="@{/admin/dashboard}" title="Dashboard">
             <i class="fa-solid fa-chart-line"></i>
         </a>
-        <a th:href="@{/admin/libros}" title="Gestión de Libros">
-            <i class="fa-solid fa-book"></i>
-        </a>
-        <a href="#" class="active" title="Gestión de Usuarios">
+        <a href="#" class="active" title="Gestión de Personal">
             <i class="fa-solid fa-users"></i>
         </a>
-        <a th:href="@{/admin/reportes}" title="Reportes">
+        <a th:href="@{/admin/logs}" title="Monitoreo de Logs">
             <i class="fa-solid fa-file-alt"></i>
+        </a>
+        <a th:href="@{/admin/reportes}" title="Reportes Internos">
+            <i class="fa-solid fa-chart-bar"></i>
         </a>
         <a th:href="@{/logout}" title="Cerrar Sesión" style="margin-top: auto; margin-bottom: 1rem;">
             <i class="fa-solid fa-right-from-bracket"></i>
@@ -52,9 +52,9 @@
 
     <div class="main-content">
         <div class="page-header">
-            <h1>Gestión de Usuarios</h1>
+            <h1>Gestión de Personal</h1>
             <button class="btn-primary" onclick="openModal()">
-                <i class="fa-solid fa-plus"></i> Agregar Usuario
+                <i class="fa-solid fa-plus"></i> Agregar Personal
             </button>
         </div>
 
@@ -67,6 +67,7 @@
                         <th>Correo</th>
                         <th>Teléfono</th>
                         <th>Rol</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -100,8 +101,8 @@
                 <div class="form-group">
                     <label for="rol">Rol</label>
                     <select id="rol" required>
-                        <option value="USUARIO">Usuario</option>
                         <option value="BIBLIOTECARIO">Bibliotecario</option>
+                        <option value="TESORERO">Tesorero</option>
                         <option value="ADMIN">Administrador</option>
                     </select>
                 </div>

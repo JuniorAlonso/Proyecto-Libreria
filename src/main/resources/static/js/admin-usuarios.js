@@ -24,6 +24,18 @@ async function cargarUsuarios() {
 
         usuarios.forEach(usuario => {
             const tr = document.createElement('tr');
+            const estadoBadge = usuario.activo 
+                ? '<span class="badge-estado activo">Activo</span>' 
+                : '<span class="badge-estado inactivo">Inactivo</span>';
+            
+            const botonEstado = usuario.activo
+                ? `<button class="btn-warning" onclick="desactivarUsuario(${usuario.id})">
+                       <i class="fa-solid fa-ban"></i> Desactivar
+                   </button>`
+                : `<button class="btn-success" onclick="activarUsuario(${usuario.id})">
+                       <i class="fa-solid fa-check"></i> Activar
+                   </button>`;
+            
             tr.innerHTML = `
                 <td>${usuario.id}</td>
                 <td><strong>${usuario.nombreCompleto || 'N/A'}</strong></td>
@@ -34,10 +46,12 @@ async function cargarUsuarios() {
                         ${getBadgeText(usuario.rol)}
                     </span>
                 </td>
+                <td>${estadoBadge}</td>
                 <td>
                     <button class="btn-edit" onclick="editUsuario(${usuario.id})">
                         <i class="fa-solid fa-edit"></i> Editar
                     </button>
+                    ${botonEstado}
                     <button class="btn-delete" onclick="deleteUsuario(${usuario.id})">
                         <i class="fa-solid fa-trash"></i> Eliminar
                     </button>
@@ -152,9 +166,42 @@ function getBadgeClass(rol) {
 }
 
 function getBadgeText(rol) {
-    if (!rol) return '👤 Usuario';
+    if (!rol) return 'Usuario';
     const r = rol.toUpperCase();
-    if (r === 'ADMIN') return '👑 Admin';
-    if (r === 'BIBLIOTECARIO') return '📚 Bibliotecario';
-    return '👤 Usuario';
+    if (r === 'ADMIN') return 'Admin';
+    if (r === 'BIBLIOTECARIO') return 'Bibliotecario';
+    if (r === 'TESORERO') return 'Tesorero';
+    return 'Usuario';
+}
+
+async function desactivarUsuario(id) {
+    if (confirm('¿Estas seguro de desactivar este usuario?')) {
+        try {
+            const response = await fetch(`/api/usuarios/${id}/desactivar`, {
+                method: 'PATCH'
+            });
+            if (response.ok) {
+                alert('Usuario desactivado exitosamente');
+                cargarUsuarios();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+}
+
+async function activarUsuario(id) {
+    if (confirm('¿Estas seguro de activar este usuario?')) {
+        try {
+            const response = await fetch(`/api/usuarios/${id}/activar`, {
+                method: 'PATCH'
+            });
+            if (response.ok) {
+                alert('Usuario activado exitosamente');
+                cargarUsuarios();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 }

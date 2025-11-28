@@ -1,6 +1,7 @@
 package com.proyecto.Libreria.controlador;
 
 import com.proyecto.Libreria.entidad.Usuario;
+import com.proyecto.Libreria.service.LogAuditoriaService;
 import com.proyecto.Libreria.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -13,9 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UsuarioControlador {
 
     private final UsuarioService usuarioService;
+    private final LogAuditoriaService logAuditoriaService;
 
-    public UsuarioControlador(UsuarioService usuarioService) {
+    public UsuarioControlador(UsuarioService usuarioService, LogAuditoriaService logAuditoriaService) {
         this.usuarioService = usuarioService;
+        this.logAuditoriaService = logAuditoriaService;
     }
 
     // LOGIN
@@ -35,6 +38,13 @@ public class UsuarioControlador {
         var usuario = usuarioService.iniciarSesion(correo, contrasena);
         if (usuario.isPresent()) {
             Usuario u = usuario.get();
+            
+            // Validar si el usuario está activo
+            if (u.getActivo() == null || !u.getActivo()) {
+                redirect.addFlashAttribute("error", "Este usuario esta inhabilitado. Contacte al administrador.");
+                return "redirect:/";
+            }
+            
             session.setAttribute("usuario", u);
 
             if ("ADMIN".equalsIgnoreCase(u.getRol())) {
@@ -45,7 +55,7 @@ public class UsuarioControlador {
                 return "redirect:/usuario/inicio";
             }
         } else {
-            redirect.addFlashAttribute("error", "Correo o contraseña incorrectos");
+            redirect.addFlashAttribute("error", "Correo o contrasena incorrectos");
             return "redirect:/";
         }
     }
@@ -126,6 +136,17 @@ public class UsuarioControlador {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario != null) {
+            // Registrar log de cierre de sesión
+            logAuditoriaService.registrarLog(
+                    usuario.getId(),
+                    usuario.getNombreCompleto(),
+                    "LOGOUT",
+                    "USUARIO",
+                    usuario.getId(),
+                    "Cierre de sesion");
+        }
         session.invalidate();
         return "redirect:/";
     }

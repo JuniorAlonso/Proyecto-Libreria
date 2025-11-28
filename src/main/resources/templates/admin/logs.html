@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoreo de Logs - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="left">
+            <div class="brand">
+                <i class="fa-solid fa-book" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+                <span class="name" style="font-size: 1.2rem; font-weight: 600; margin-left: 0.5rem;">LIBRARY ADMIN</span>
+            </div>
+        </div>
+        <div class="right" style="display: flex; align-items: center; gap: 1rem;">
+            <a th:href="@{/usuario/inicio}" class="btn-secondary" style="text-decoration: none; padding: 0.3rem 0.6rem; border-radius: 4px; background-color: #6c757d; color: white; font-size: 0.85rem;">
+                <i class="fa-solid fa-user" style="font-size: 0.8rem;"></i>
+                <span>Menu usuario</span>
+            </a>
+            <span th:text="${usuario != null ? usuario.nombreCompleto : 'Administrador'}">Administrador</span>
+            <a th:href="@{/logout}" style="text-decoration: none;">
+                <i class="fa-solid fa-circle-user" style="font-size: 1.8rem;"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="sidebar">
+        <a th:href="@{/admin/dashboard}" title="Dashboard">
+            <i class="fa-solid fa-chart-line"></i>
+        </a>
+        <a th:href="@{/admin/usuarios}" title="Gestión de Personal">
+            <i class="fa-solid fa-users"></i>
+        </a>
+        <a href="#" class="active" title="Monitoreo de Logs">
+            <i class="fa-solid fa-file-alt"></i>
+        </a>
+        <a th:href="@{/admin/reportes}" title="Reportes Internos">
+            <i class="fa-solid fa-chart-bar"></i>
+        </a>
+        <a th:href="@{/logout}" title="Cerrar Sesión" style="margin-top: auto; margin-bottom: 1rem;">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Monitoreo de Logs - Auditoria y Seguridad</h1>
+            <button class="btn-primary" onclick="exportarLogs()">
+                <i class="fa-solid fa-download"></i> Exportar Logs
+            </button>
+        </div>
+
+        <div class="filters" style="margin-bottom: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <select id="filtroAccion" onchange="filtrarLogs()">
+                <option value="">Todas las acciones</option>
+                <option value="LOGIN">Inicio de Sesion</option>
+                <option value="LOGOUT">Cierre de Sesion</option>
+                <option value="CREAR">Crear</option>
+                <option value="MODIFICAR">Modificar</option>
+                <option value="DESACTIVAR">Desactivar</option>
+                <option value="ACTIVAR">Activar</option>
+                <option value="ELIMINAR">Eliminar</option>
+            </select>
+            <select id="filtroEntidad" onchange="filtrarLogs()">
+                <option value="">Todas las entidades</option>
+                <option value="USUARIO">Usuario</option>
+                <option value="LIBRO">Libro</option>
+                <option value="PRESTAMO">Prestamo</option>
+            </select>
+            <input type="date" id="fechaInicio" onchange="filtrarLogs()">
+            <input type="date" id="fechaFin" onchange="filtrarLogs()">
+            <button class="btn-secondary" onclick="limpiarFiltros()">
+                <i class="fa-solid fa-times"></i> Limpiar Filtros
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table id="logsTable">
+                <thead>
+                    <tr>
+                        <th>Fecha/Hora</th>
+                        <th>Usuario</th>
+                        <th>Accion</th>
+                        <th>Entidad</th>
+                        <th>Descripcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script th:src="@{/js/admin-logs.js}"></script>
+</body>
+</html>

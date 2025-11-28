@@ -19,9 +19,9 @@
         </div>
 
         <div class="right" style="display: flex; align-items: center; gap: 1rem;">
-            <a th:href="@{/usuario/inicio}" class="btn-volver-usuario" title="Volver al área de usuario">
-                <i class="fa-solid fa-arrow-left"></i>
-                <span>Área Usuario</span>
+            <a th:href="@{/usuario/inicio}" class="btn-secondary" style="text-decoration: none; padding: 0.3rem 0.6rem; border-radius: 4px; background-color: #6c757d; color: white; font-size: 0.85rem;">
+                <i class="fa-solid fa-user" style="font-size: 0.8rem;"></i>
+                <span>Menu usuario</span>
             </a>
             <span th:text="${usuario != null ? usuario.nombreCompleto : 'Administrador'}">Administrador</span>
             <a th:href="@{/logout}" style="text-decoration: none;">
@@ -34,14 +34,14 @@
         <a th:href="@{/admin/dashboard}" title="Dashboard">
             <i class="fa-solid fa-chart-line"></i>
         </a>
-        <a th:href="@{/admin/libros}" title="Gestión de Libros">
-            <i class="fa-solid fa-book"></i>
-        </a>
-        <a th:href="@{/admin/usuarios}" title="Gestión de Usuarios">
+        <a th:href="@{/admin/usuarios}" title="Gestión de Personal">
             <i class="fa-solid fa-users"></i>
         </a>
-        <a href="#" class="active" title="Reportes">
+        <a th:href="@{/admin/logs}" title="Monitoreo de Logs">
             <i class="fa-solid fa-file-alt"></i>
+        </a>
+        <a href="#" class="active" title="Reportes Internos">
+            <i class="fa-solid fa-chart-bar"></i>
         </a>
         <a th:href="@{/logout}" title="Cerrar Sesión" style="margin-top: auto; margin-bottom: 1rem;">
             <i class="fa-solid fa-right-from-bracket"></i>
@@ -54,18 +54,18 @@
         </div>
 
         <div class="filters">
-            <select id="filterTipo">
-                <option value="">Todos los préstamos</option>
+            <select id="filterTipo" onchange="filtrarReporte()">
+                <option value="">Todos los prestamos</option>
                 <option value="activo">Activos</option>
                 <option value="devuelto">Devueltos</option>
                 <option value="vencido">Vencidos</option>
             </select>
             
-            <input type="date" id="filterFechaInicio" placeholder="Fecha inicio">
-            <input type="date" id="filterFechaFin" placeholder="Fecha fin">
+            <input type="date" id="filterFechaInicio" onchange="filtrarReporte()" placeholder="Fecha inicio">
+            <input type="date" id="filterFechaFin" onchange="filtrarReporte()" placeholder="Fecha fin">
             
-            <button onclick="filtrarReporte()">
-                <i class="fa-solid fa-filter"></i> Filtrar
+            <button onclick="limpiarFiltros()" class="btn-secondary">
+                <i class="fa-solid fa-times"></i> Limpiar
             </button>
             
             <button class="btn-primary" onclick="exportarReporte()">
@@ -132,30 +132,106 @@
             const fechaInicio = document.getElementById('filterFechaInicio').value;
             const fechaFin = document.getElementById('filterFechaFin').value;
             
-            console.log('Filtrando:', { tipo, fechaInicio, fechaFin });
-            alert('Filtros aplicados');
+            const filas = document.querySelectorAll('.reporte-table tbody tr');
+            let filasVisibles = 0;
+            
+            filas.forEach(fila => {
+                if (fila.cells.length < 8) return;
+                
+                const estadoCell = fila.cells[5];
+                const fechaPrestamoCell = fila.cells[2];
+                
+                let mostrar = true;
+                
+                if (tipo) {
+                    const estadoBadge = estadoCell.querySelector('.estado-badge');
+                    if (estadoBadge) {
+                        const clases = estadoBadge.className;
+                        if (tipo === 'activo' && !clases.includes('activo')) mostrar = false;
+                        if (tipo === 'devuelto' && !clases.includes('devuelto')) mostrar = false;
+                        if (tipo === 'vencido' && !clases.includes('vencido')) mostrar = false;
+                    }
+                }
+                
+                if (fechaInicio || fechaFin) {
+                    const fechaTexto = fechaPrestamoCell.textContent.trim();
+                    const partes = fechaTexto.split('/');
+                    if (partes.length === 3) {
+                        const fechaPrestamo = new Date(partes[2], partes[1] - 1, partes[0]);
+                        
+                        if (fechaInicio) {
+                            const inicio = new Date(fechaInicio);
+                            if (fechaPrestamo < inicio) mostrar = false;
+                        }
+                        
+                        if (fechaFin) {
+                            const fin = new Date(fechaFin);
+                            fin.setHours(23, 59, 59);
+                            if (fechaPrestamo > fin) mostrar = false;
+                        }
+                    }
+                }
+                
+                if (mostrar) {
+                    fila.style.display = '';
+                    filasVisibles++;
+                } else {
+                    fila.style.display = 'none';
+                }
+            });
+            
+            console.log('Filtros aplicados. Filas visibles:', filasVisibles);
+        }
+        
+        function limpiarFiltros() {
+            document.getElementById('filterTipo').value = '';
+            document.getElementById('filterFechaInicio').value = '';
+            document.getElementById('filterFechaFin').value = '';
+            
+            const filas = document.querySelectorAll('.reporte-table tbody tr');
+            filas.forEach(fila => {
+                fila.style.display = '';
+            });
         }
         
         function exportarReporte() {
-            alert('Exportando reporte a Excel...');
+            const filas = document.querySelectorAll('.reporte-table tbody tr');
+            let csv = 'Usuario,Libro,Fecha Prestamo,Fecha Devolucion,Fecha Entrega,Estado,Multa\n';
+            
+            filas.forEach(fila => {
+                if (fila.style.display !== 'none' && fila.cells.length >= 8) {
+                    const datos = [];
+                    for (let i = 0; i < 7; i++) {
+                        let texto = fila.cells[i].textContent.trim().replace(/\s+/g, ' ');
+                        datos.push('"' + texto.replace(/"/g, '""') + '"');
+                    }
+                    csv += datos.join(',') + '\n';
+                }
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'reporte_prestamos_' + new Date().toISOString().split('T')[0] + '.csv';
+            link.click();
         }
         
         async function eliminarPrestamo(id) {
-            if (confirm('¿Estás seguro de eliminar este préstamo? Esta acción no se puede deshacer.')) {
+            if (confirm('ADVERTENCIA: Esta seguro de eliminar este prestamo? Esta accion no se puede deshacer.')) {
                 try {
-                    const response = await fetch(`/api/prestamos/${id}`, {
+                    const response = await fetch('/api/prestamos/' + id, {
                         method: 'DELETE'
                     });
                     
                     if (response.ok) {
-                        alert('Préstamo eliminado exitosamente');
+                        alert('Prestamo eliminado exitosamente');
                         location.reload();
                     } else {
-                        alert('Error al eliminar el préstamo');
+                        alert('Error al eliminar el prestamo');
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Error al eliminar el préstamo');
+                    alert('Error al eliminar el prestamo');
                 }
             }
         }

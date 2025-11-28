@@ -2,10 +2,13 @@ package com.proyecto.Libreria.controlador;
 
 import com.proyecto.Libreria.entidad.Usuario;
 import com.proyecto.Libreria.service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -22,40 +25,83 @@ public class UsuarioRestControlador {
         return ResponseEntity.ok(usuarioService.listarUsuarios());
     }
 
+    @GetMapping("/activos")
+    public ResponseEntity<List<Usuario>> obtenerUsuariosActivos() {
+        return ResponseEntity.ok(usuarioService.listarUsuariosActivos());
+    }
+
+    @GetMapping("/rol/{rol}")
+    public ResponseEntity<List<Usuario>> obtenerUsuariosPorRol(@PathVariable String rol) {
+        return ResponseEntity.ok(usuarioService.listarUsuariosPorRol(rol));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Long id) {
-        List<Usuario> usuarios = usuarioService.listarUsuarios();
-        Usuario usuario = usuarios.stream()
-                .filter(u -> u.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-        
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        }
-        return ResponseEntity.notFound().build();
+        Optional<Usuario> usuario = usuarioService.obtenerUsuarioPorId(id);
+        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
-        Usuario nuevoUsuario = usuarioService.registrar(usuario);
-        return ResponseEntity.ok(nuevoUsuario);
+    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario, HttpSession session) {
+        try {
+            Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+            if (usuarioSesion != null) {
+                usuario.setModificadoPor(usuarioSesion.getNombreCompleto());
+            }
+            Usuario nuevoUsuario = usuarioService.registrar(usuario);
+            return ResponseEntity.ok(nuevoUsuario);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
-        usuario.setId(id);
-        Usuario usuarioActualizado = usuarioService.registrar(usuario);
-        return ResponseEntity.ok(usuarioActualizado);
+    public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario,
+            HttpSession session) {
+        try {
+            Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+            String modificadoPor = usuarioSesion != null ? usuarioSesion.getNombreCompleto() : "Sistema";
+
+            Usuario usuarioActualizado = usuarioService.actualizarUsuario(id, usuario, modificadoPor);
+            return ResponseEntity.ok(usuarioActualizado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PatchMapping("/{id}/desactivar")
+    public ResponseEntity<?> desactivarUsuario(@PathVariable Long id, HttpSession session) {
+        try {
+            Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+            String modificadoPor = usuarioSesion != null ? usuarioSesion.getNombreCompleto() : "Sistema";
+
+            usuarioService.desactivarUsuario(id, modificadoPor);
+            return ResponseEntity.ok(Map.of("mensaje", "Usuario desactivado exitosamente"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PatchMapping("/{id}/activar")
+    public ResponseEntity<?> activarUsuario(@PathVariable Long id, HttpSession session) {
+        try {
+            Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+            String modificadoPor = usuarioSesion != null ? usuarioSesion.getNombreCompleto() : "Sistema";
+
+            usuarioService.activarUsuario(id, modificadoPor);
+            return ResponseEntity.ok(Map.of("mensaje", "Usuario activado exitosamente"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarUsuario(@PathVariable Long id) {
         try {
-            // Aquí deberías implementar la lógica de eliminación
-            return ResponseEntity.ok().build();
+            usuarioService.eliminarUsuario(id);
+            return ResponseEntity.ok(Map.of("mensaje", "Usuario eliminado exitosamente"));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 }
