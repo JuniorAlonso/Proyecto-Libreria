@@ -38,13 +38,13 @@ public class UsuarioControlador {
         var usuario = usuarioService.iniciarSesion(correo, contrasena);
         if (usuario.isPresent()) {
             Usuario u = usuario.get();
-            
+
             // Validar si el usuario está activo
             if (u.getActivo() == null || !u.getActivo()) {
                 redirect.addFlashAttribute("error", "Este usuario esta inhabilitado. Contacte al administrador.");
                 return "redirect:/";
             }
-            
+
             session.setAttribute("usuario", u);
 
             if ("ADMIN".equalsIgnoreCase(u.getRol())) {
@@ -77,10 +77,10 @@ public class UsuarioControlador {
     }
 
     // PÁGINA DE SELECCIÓN DE PLANES
-    @GetMapping("/suscripcion")
-    public String mostrarPlanesSuscripcion() {
-        return "usuario/suscripcion";
-    }
+    // @GetMapping("/suscripcion") -> Movido a SuscripcionControlador
+    // public String mostrarPlanesSuscripcion() {
+    // return "usuario/suscripcion";
+    // }
 
     // REGISTRO - PASO 2 (Muestra el formulario de pago con el plan seleccionado)
     @GetMapping("/registro-pago")
@@ -139,6 +139,7 @@ public class UsuarioControlador {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario != null) {
             // Registrar log de cierre de sesión
+
             logAuditoriaService.registrarLog(
                     usuario.getId(),
                     usuario.getNombreCompleto(),

@@ -3,6 +3,7 @@ package com.proyecto.Libreria.service.impl;
 import com.proyecto.Libreria.entidad.Usuario;
 import com.proyecto.Libreria.service.LogAuditoriaService;
 import com.proyecto.Libreria.service.UsuarioService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -68,13 +69,18 @@ public class UsuarioServiceImpl implements UsuarioService {
                     if (encoder.matches(contrasena.trim(), hashed.trim())) {
                         // Solo registrar log si el usuario está activo
                         if (usuario.get().getActivo() != null && usuario.get().getActivo()) {
-                            logAuditoriaService.registrarLog(
-                                    usuario.get().getId(),
-                                    usuario.get().getNombreCompleto(),
-                                    "LOGIN",
-                                    "USUARIO",
-                                    usuario.get().getId(),
-                                    "Inicio de sesion exitoso");
+                            try {
+                                logAuditoriaService.registrarLog(
+                                        usuario.get().getId(),
+                                        usuario.get().getNombreCompleto(),
+                                        "LOGIN",
+                                        "USUARIO",
+                                        usuario.get().getId(),
+                                        "Inicio de sesion exitoso");
+                            } catch (Exception e) {
+                                System.err.println("Error al registrar log de login: " + e.getMessage());
+                                e.printStackTrace();
+                            }
                         }
                         return usuario;
                     }
@@ -86,13 +92,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 
                         // Solo registrar log si el usuario está activo
                         if (usuario.get().getActivo() != null && usuario.get().getActivo()) {
-                            logAuditoriaService.registrarLog(
-                                    usuario.get().getId(),
-                                    usuario.get().getNombreCompleto(),
-                                    "LOGIN",
-                                    "USUARIO",
-                                    usuario.get().getId(),
-                                    "Inicio de sesion exitoso");
+                            try {
+                                logAuditoriaService.registrarLog(
+                                        usuario.get().getId(),
+                                        usuario.get().getNombreCompleto(),
+                                        "LOGIN",
+                                        "USUARIO",
+                                        usuario.get().getId(),
+                                        "Inicio de sesion exitoso");
+                            } catch (Exception e) {
+                                System.err.println("Error al registrar log de login: " + e.getMessage());
+                                e.printStackTrace();
+                            }
                         }
                         return usuario;
                     }
@@ -223,6 +234,31 @@ public class UsuarioServiceImpl implements UsuarioService {
     public List<Usuario> listarUsuariosPorRol(String rol) {
         return usuarioRepository.findAll().stream()
                 .filter(u -> rol.equalsIgnoreCase(u.getRol()))
+                .filter(u -> rol.equalsIgnoreCase(u.getRol()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void renovarMembresia(Long id) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            // Si ya tiene membresía activa, sumar un mes a la fecha actual de vencimiento
+            if (usuario.tieneMembresiaActiva()) {
+                usuario.setFechaFinMembresia(usuario.getFechaFinMembresia().plusMonths(1));
+            } else {
+                // Si no, empieza desde hoy + 1 mes
+                usuario.setFechaFinMembresia(LocalDate.now().plusMonths(1));
+            }
+            usuarioRepository.save(usuario);
+
+            logAuditoriaService.registrarLog(
+                    id,
+                    usuario.getNombreCompleto(),
+                    "RENOVAR_MEMBRESIA",
+                    "USUARIO",
+                    id,
+                    "Membresía renovada hasta: " + usuario.getFechaFinMembresia());
+        }
     }
 }

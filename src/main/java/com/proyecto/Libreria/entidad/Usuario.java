@@ -53,6 +53,9 @@ public class Usuario {
     @Column(name = "modificado_por")
     private String modificadoPor; // Usuario que realizó la última modificación
 
+    @Column(name = "fecha_fin_membresia")
+    private java.time.LocalDate fechaFinMembresia;
+
     // CONSTRUCTORES
 
     // Constructor vacío
@@ -211,6 +214,18 @@ public class Usuario {
 
     public void setModificadoPor(String modificadoPor) {
         this.modificadoPor = modificadoPor;
+    }
+
+    public java.time.LocalDate getFechaFinMembresia() {
+        return fechaFinMembresia;
+    }
+
+    public void setFechaFinMembresia(java.time.LocalDate fechaFinMembresia) {
+        this.fechaFinMembresia = fechaFinMembresia;
+    }
+
+    public boolean tieneMembresiaActiva() {
+        return fechaFinMembresia != null && fechaFinMembresia.isAfter(java.time.LocalDate.now());
     }
 
 }
