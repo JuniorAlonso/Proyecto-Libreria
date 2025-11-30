@@ -64,6 +64,76 @@
 </head>
 
 <body>
+    <!-- Header -->
+    <header>
+        <div class="left">
+            <div class="menu-container">
+                <div class="menu" id="menu">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="brand">
+                <i class="fa-solid fa-book"></i>
+                <span class="name">LIBRARY</span>
+            </div>
+        </div>
+
+        <div class="right">
+            <span th:text="${usuario != null ? usuario.nombreCompleto : 'Usuario'}">Usuario</span>
+            <a th:href="@{/logout}">
+                <i class="fa-solid fa-circle-user"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <nav>
+            <ul>
+                <li>
+                    <a th:href="@{usuario/inicio}" class="active" title="Inicio">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/usuario/biblioteca}" title="Biblioteca">
+                        <i class="fa-solid fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" title="Préstamos">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                        <span>Préstamos</span>
+                    </a>
+                </li>
+                <!-- Botón Gestionar solo para Administradores -->
+                <li th:if="${usuario != null and (usuario.rol == 'ADMIN' or usuario.rol == 'admin')}">
+                    <a th:href="@{/admin/dashboard}" title="Gestionar">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Gestionar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" title="Buscar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Buscar</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/logout}" title="Cerrar Sesión">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Salir</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
     <div class="container">
         <div class="header-actions">
             <a th:href="@{/logout}" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a>
@@ -80,6 +150,8 @@
             <i class="fa-solid fa-book"></i> Gestionar Libros
         </a>
     </div>
+
+    <script th:src="@{/js/script.js}"></script>
 </body>
 
 </html>

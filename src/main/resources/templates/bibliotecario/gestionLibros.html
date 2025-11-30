@@ -5,84 +5,96 @@
     <meta charset="UTF-8">
     <title>Gestión de Libros - Bibliotecario</title>
     <link rel="stylesheet" th:href="@{/css/global.css}">
-    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/BibliotecarioEstilos/gestionLibros.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Estilos específicos para el modal si no están en admin.css */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            padding: 2rem;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.5rem;
-        }
-
-        .btn-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #555;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-    </style>
+    
 </head>
 
 <body>
+    <!-- Header -->
+    <header>
+        <div class="left">
+            <div class="menu-container">
+                <div class="menu" id="menu">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="brand">
+                <i class="fa-solid fa-book"></i>
+                <span class="name">BiblioMundo</span>
+            </div>
+        </div>
+
+        <div class="right">
+            <!-- Botón Gestionar solo para Administradores -->
+            <a th:if="${usuario != null and (usuario.rol == 'ADMIN' or usuario.rol == 'admin')}" 
+               th:href="@{/admin/dashboard}" 
+               class="btn-gestionar"
+               title="Panel de Administración">
+                <i class="fa-solid fa-gear"></i>
+                <span>Gestionar</span>
+            </a>
+            <span th:text="${usuario != null ? usuario.nombreCompleto : 'Usuario'}">Usuario</span>
+            <a th:href="@{/logout}">
+                <i class="fa-solid fa-circle-user"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <nav>
+            <ul>
+                <li>
+                    <a th:href="@{usuario/inicio}" class="active" title="Inicio">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/usuario/biblioteca}" title="Biblioteca">
+                        <i class="fa-solid fa-book"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" title="Préstamos">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                        <span>Préstamos</span>
+                    </a>
+                </li>
+                <!-- Botón Gestionar solo para Administradores -->
+                <li th:if="${usuario != null and (usuario.rol == 'ADMIN' or usuario.rol == 'admin')}">
+                    <a th:href="@{/admin/dashboard}" title="Gestionar">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Gestionar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" title="Buscar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Buscar</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/logout}" title="Cerrar Sesión">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Salir</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
     <div class="container">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1>Gestión de Libros</h1>
             <div>
                 <a th:href="@{/dashboardBibliotecario}" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i>
                     Volver al Inicio</a>
-                <a th:href="@{/logout}" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> Salir</a>
             </div>
         </div>
 
@@ -163,6 +175,8 @@
     </div>
 
     <script th:src="@{/js/bibliotecario.js}"></script>
+    <script th:src="@{/js/script.js}"></script>
+
 </body>
 
 </html>
