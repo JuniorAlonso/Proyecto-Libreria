@@ -2,8 +2,8 @@ package com.proyecto.Libreria;
 
 import com.proyecto.Libreria.entidad.Libro;
 import com.proyecto.Libreria.entidad.Usuario;
+import com.proyecto.Libreria.service.UsuarioService;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.proyecto.Libreria.repositorio.LibroRepositorio;
 import com.proyecto.Libreria.repositorio.UsuarioRepositorio;
@@ -15,57 +15,60 @@ public class InicializadorDatos implements CommandLineRunner {
 
     private final LibroRepositorio libroRepository;
     private final UsuarioRepositorio usuarioRepository;
+    private final UsuarioService usuarioService;
 
-    public InicializadorDatos(LibroRepositorio libroRepository, UsuarioRepositorio usuarioRepository) {
+    public InicializadorDatos(LibroRepositorio libroRepository, UsuarioRepositorio usuarioRepository,
+            UsuarioService usuarioService) {
         this.libroRepository = libroRepository;
         this.usuarioRepository = usuarioRepository;
+        this.usuarioService = usuarioService;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        
-        // 1. Inicializar Usuario Administrador
-        if (usuarioRepository.findByCorreo("admin@libreria.com").isEmpty()) {
-            System.out.println("--- Creando usuario administrador ---");
+        // 1. Crear nuevo administrador si no existe
+        System.out.println("--- Verificando administrador del sistema ---");
+        try {
+            String adminEmail = "admin@biblioteca.com";
+            java.util.Optional<Usuario> adminExistente = usuarioRepository.findByCorreo(adminEmail);
 
-            Usuario admin = new Usuario();
-            admin.setNombreCompleto("Administrador");
-            admin.setPrimerApellido("Sistema");
-            admin.setCorreo("admin@libreria.com");
-            admin.setContrasena(encoder.encode("admin123"));
-            admin.setRol("ADMIN");
-            admin.setActivo(true);
-            admin.setFechaCreacion(LocalDateTime.now());
-            admin.setTelefono("0000-0000");
+            if (adminExistente.isEmpty()) {
+                Usuario nuevoAdmin = new Usuario();
+                nuevoAdmin.setNombreCompleto("Administrador");
+                nuevoAdmin.setPrimerApellido("Sistema");
+                nuevoAdmin.setCorreo(adminEmail);
+                nuevoAdmin.setContrasena("admin123"); // El servicio lo encriptará
+                nuevoAdmin.setRol("ADMIN");
+                nuevoAdmin.setActivo(true);
+                nuevoAdmin.setFechaCreacion(LocalDateTime.now());
 
-            usuarioRepository.save(admin);
-            System.out.println("Usuario administrador creado:");
-            System.out.println("  Correo: admin@libreria.com");
-            System.out.println("  Contrasena: admin123");
+                // Usar el servicio en lugar del repositorio
+                Usuario adminGuardado = usuarioService.registrar(nuevoAdmin);
+                System.out.println("✓ Nuevo administrador creado: " + adminEmail);
+                System.out.println("  ID: " + adminGuardado.getId());
+                System.out.println("  Contraseña: admin123");
+            } else {
+                System.out.println("✓ Administrador ya existe: " + adminEmail);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al crear administrador: " + e.getMessage());
+            e.printStackTrace();
         }
-        
-        // 2. Inicializar Usuario de Prueba
-        if (usuarioRepository.findByCorreo("maria.lopez@gmail.com").isEmpty()) {
-            System.out.println("--- Creando usuario de prueba ---");
 
-            Usuario usuario = new Usuario();
-            usuario.setNombreCompleto("Maria Lopez");
-            usuario.setPrimerApellido("Lopez");
-            usuario.setSegundoApellido("Garcia");
-            usuario.setCorreo("maria.lopez@gmail.com");
-            usuario.setContrasena(encoder.encode("maria123"));
-            usuario.setRol("USUARIO");
-            usuario.setActivo(true);
-            usuario.setFechaCreacion(LocalDateTime.now());
-            usuario.setTelefono("7890-1234");
-            usuario.setDireccion("Colonia Escalon, San Salvador");
-            usuario.setDui("12345678-9");
-
-            usuarioRepository.save(usuario);
-            System.out.println("Usuario de prueba creado:");
-            System.out.println("  Correo: maria.lopez@gmail.com");
-            System.out.println("  Contrasena: maria123");
+        // 2. Convertir a todos en ADMIN PRIMERO
+        System.out.println("--- Actualizando todos los usuarios a ADMIN ---");
+        try {
+            java.util.List<Usuario> todos = usuarioRepository.findAll();
+            for (Usuario u : todos) {
+                if (!"ADMIN".equals(u.getRol())) {
+                    u.setRol("ADMIN");
+                    u.setActivo(true);
+                    usuarioRepository.save(u);
+                    System.out.println("Usuario actualizado a ADMIN: " + u.getCorreo());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error al actualizar usuarios: " + e.getMessage());
         }
 
         // 3. Inicializar Libros
@@ -92,5 +95,7 @@ public class InicializadorDatos implements CommandLineRunner {
 
             System.out.println("Libros iniciales cargados: " + libroRepository.count());
         }
+
+        System.out.println("=== Inicialización completada ===");
     }
 }
